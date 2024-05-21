@@ -5,5 +5,5 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideHttpClient(withInterceptors([]))]
+    providers: [provideRouter(routes), provideHttpClient(withInterceptors([]))],
 };
