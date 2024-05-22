@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { BucketService } from '../../core/services/bucket.service';
 import { Bucket } from '../../core/models/bucket.model';
 import { CreateBucketComponent } from '../create-bucket/create-bucket.component';
@@ -16,7 +17,10 @@ export class BucketListComponent implements OnInit {
     buckets: Bucket[] = [];
     showCreateForm = false;
 
-    constructor(private bucketService: BucketService) {}
+    constructor(
+        private bucketService: BucketService,
+        private router: Router,
+    ) {}
 
     ngOnInit(): void {
         console.log('BucketListComponent initialized');
@@ -28,5 +32,9 @@ export class BucketListComponent implements OnInit {
     onBucketCreated(newBucket: Bucket) {
         this.buckets.push(newBucket);
         this.showCreateForm = false;
+    }
+
+    goToBucketDetail(id: number): void {
+        this.router.navigate(['/bucket', id]);
     }
 }

@@ -7,6 +7,17 @@
         <app-create-bucket (bucketCreated)="onBucketCreated($event)"></app-create-bucket>
     </div>
     <ul class="list-group">
-        <li class="list-group-item" *ngFor="let bucket of buckets">{{ bucket.name }} - {{ bucket.location }}</li>
+        <li
+            class="list-group-item"
+            *ngFor="let bucket of buckets"
+            (click)="goToBucketDetail(bucket.id)"
+            (keydown.enter)="goToBucketDetail(bucket.id)"
+            (keydown.space)="goToBucketDetail(bucket.id)"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="'Bucket ' + bucket.name + ' at ' + bucket.location"
+        >
+            {{ bucket.name }} - {{ bucket.location }}
+        </li>
     </ul>
 </div>
