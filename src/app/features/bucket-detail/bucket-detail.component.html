@@ -37,14 +37,16 @@
             <h3>Files</h3>
             <p>Total Files: {{ getTotalFiles() }}</p>
             <ul class="list-group mb-3">
-                <li class="list-group-item" *ngFor="let file of files">{{ file.name }}</li>
+                <li class="list-group-item" *ngFor="let file of files">
+                    {{ file.name }}
+                    <button class="btn btn-sm btn-danger float-right" (click)="deleteFile(file.id)">Delete</button>
+                </li>
             </ul>
-            <button class="btn btn-danger">Delete Object</button>
-            <button class="btn btn-primary">Upload Object</button>
+            <button class="btn btn-primary" (click)="uploadFile()">Upload Object</button>
         </div>
         <div *ngIf="selectedTab === 'details'" id="details-tab">
             <h3>Details</h3>
-            <!-- TODO: Add details content here -->
+            <!-- Add details content here -->
         </div>
     </div>
 </div>

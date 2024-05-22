@@ -2,13 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BucketService } from '../../core/services/bucket.service';
+import { BucketService } from '../../core/services/bucket/bucket.service';
+import { FileService } from '../../core/services/file/file.service';
 import { Bucket } from '../../core/models/bucket.model';
-
-interface File {
-    id: number;
-    name: string;
-}
+import { File } from '../../core/models/file.model';
 
 @Component({
     selector: 'app-bucket-detail',
@@ -25,6 +22,7 @@ export class BucketDetailComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private bucketService: BucketService,
+        private fileService: FileService,
     ) {}
 
     ngOnInit(): void {
@@ -32,11 +30,7 @@ export class BucketDetailComponent implements OnInit {
         this.bucketService.getBuckets().subscribe((buckets) => {
             this.bucket = buckets.find((b) => b.id === id);
             if (this.bucket) {
-                // Mock files data
-                this.files = [
-                    { id: 1, name: 'File 1' },
-                    { id: 2, name: 'File 2' },
-                ];
+                this.loadFiles(this.bucket.id);
             }
         });
     }
@@ -45,7 +39,23 @@ export class BucketDetailComponent implements OnInit {
         this.selectedTab = tab;
     }
 
+    loadFiles(bucketId: number): void {
+        this.fileService.getFiles(bucketId).subscribe((files) => {
+            this.files = files;
+        });
+    }
+
     getTotalFiles(): number {
         return this.files.length;
+    }
+
+    deleteFile(fileId: number): void {
+        this.fileService.deleteFile(fileId).subscribe(() => {
+            this.files = this.files.filter((file) => file.id !== fileId);
+        });
+    }
+
+    uploadFile(): void {
+        // TODO: Implement file upload logic
     }
 }

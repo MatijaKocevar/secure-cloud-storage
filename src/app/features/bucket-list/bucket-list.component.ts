@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BucketService } from '../../core/services/bucket.service';
+import { BucketService } from '../../core/services/bucket/bucket.service';
 import { Bucket } from '../../core/models/bucket.model';
 import { CreateBucketComponent } from '../create-bucket/create-bucket.component';
 
