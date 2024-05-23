@@ -6,7 +6,7 @@ import { dirname, join, resolve } from 'path';
 import { readFileSync, writeFileSync } from 'fs';
 import bootstrap from './src/main.server';
 import { Bucket } from './src/app/core/models/bucket.model';
-import { File } from './src/app/core/models/file.model';
+import { BucketFile } from './src/app/core/models/file.model';
 
 // Define __filename and __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -45,15 +45,19 @@ export function app(): express.Express {
     // API to get files by bucketId
     server.get('/api/files', (req: Request, res: Response) => {
         const bucketId = parseInt(req.query['bucketId'] as string, 10);
-        const data = JSON.parse(readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8')) as File[];
+        const data = JSON.parse(
+            readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
+        ) as BucketFile[];
         const files = data.filter((file) => file.bucketId === bucketId);
         res.json(files);
     });
 
     // API to upload a file
     server.post('/api/files', (req: Request, res: Response) => {
-        const data = JSON.parse(readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8')) as File[];
-        const newFile: File = req.body;
+        const data = JSON.parse(
+            readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
+        ) as BucketFile[];
+        const newFile: BucketFile = req.body;
         newFile.id = data.length ? Math.max(...data.map((f) => f.id)) + 1 : 1;
         data.push(newFile);
         writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
@@ -63,7 +67,7 @@ export function app(): express.Express {
     // API to delete a file
     server.delete('/api/files/:id', (req: Request, res: Response) => {
         const fileId = parseInt(req.params['id'], 10);
-        let data = JSON.parse(readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8')) as File[];
+        let data = JSON.parse(readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8')) as BucketFile[];
         data = data.filter((file) => file.id !== fileId);
         writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
         res.sendStatus(204);

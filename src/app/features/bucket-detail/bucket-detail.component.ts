@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { BucketService } from '../../core/services/bucket/bucket.service';
 import { FileService } from '../../core/services/file/file.service';
 import { Bucket } from '../../core/models/bucket.model';
-import { File } from '../../core/models/file.model';
+import { BucketFile } from '../../core/models/file.model';
 
 @Component({
     selector: 'app-bucket-detail',
@@ -16,7 +16,7 @@ import { File } from '../../core/models/file.model';
 })
 export class BucketDetailComponent implements OnInit {
     bucket: Bucket | undefined;
-    files: File[] = [];
+    files: BucketFile[] = [];
     selectedTab: 'files' | 'details' = 'files';
 
     constructor(
