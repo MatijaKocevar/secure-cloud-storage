@@ -19,9 +19,11 @@ fileRouter.get('/', (req: Request, res: Response) => {
             readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
         ) as BucketFile[];
         const files = data.filter((file) => file.bucketId === bucketId);
+
         res.json(files);
     } catch (error) {
         console.error('Error reading files.json:', error);
+
         res.status(500).send('Error reading files.json');
     }
 });
@@ -42,14 +44,17 @@ fileRouter.post('/', (req: Request, res: Response) => {
             newFile.id = data.length ? Math.max(...data.map((f) => f.id)) + 1 : 1;
             data.push(newFile);
             location.availableSpace -= newFile.size;
+
             writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
             writeFileSync(join(browserDistFolder, 'assets/data/locations.json'), JSON.stringify(locations, null, 2));
+
             res.json(newFile);
         } else {
             res.status(400).send('Not enough available space to upload the file.');
         }
     } catch (error) {
         console.error('Error updating files.json:', error);
+
         res.status(500).send('Error updating files.json');
     }
 });
@@ -69,11 +74,13 @@ fileRouter.delete('/:id', (req: Request, res: Response) => {
 
             if (location) {
                 location.availableSpace += fileToDelete.size;
+
                 writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
                 writeFileSync(
                     join(browserDistFolder, 'assets/data/locations.json'),
                     JSON.stringify(locations, null, 2),
                 );
+
                 res.sendStatus(204);
             } else {
                 res.status(400).send('Location not found for the file.');
@@ -83,6 +90,7 @@ fileRouter.delete('/:id', (req: Request, res: Response) => {
         }
     } catch (error) {
         console.error('Error deleting file from files.json:', error);
+
         res.status(500).send('Error deleting file');
     }
 });

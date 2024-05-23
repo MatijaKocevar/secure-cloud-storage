@@ -21,9 +21,11 @@ bucketRouter.get('/', (req: Request, res: Response) => {
             ...bucket,
             locationName: getLocationById(bucket.locationId)?.name || 'Unknown',
         }));
+
         res.json(buckets);
     } catch (error) {
         console.error('Error reading buckets.json:', error);
+
         res.status(500).send('Error reading buckets.json');
     }
 });
@@ -35,13 +37,16 @@ bucketRouter.post('/', (req: Request, res: Response) => {
         const newBucket: Bucket = req.body;
         newBucket.id = data.length ? Math.max(...data.map((b) => b.id)) + 1 : 1;
         data.push(newBucket);
+
         writeFileSync(join(browserDistFolder, 'assets/data/buckets.json'), JSON.stringify(data, null, 2));
+
         res.json({
             ...newBucket,
             locationName: getLocationById(newBucket.locationId)?.name || 'Unknown',
         });
     } catch (error) {
         console.error('Error updating buckets.json:', error);
+
         res.status(500).send('Error updating buckets.json');
     }
 });
@@ -80,6 +85,7 @@ bucketRouter.delete('/:id', (req: Request, res: Response) => {
         res.sendStatus(204);
     } catch (error) {
         console.error('Error deleting bucket from buckets.json:', error);
+
         res.status(500).send('Error deleting bucket');
     }
 });

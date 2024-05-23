@@ -11,5 +11,6 @@ const browserDistFolder = join(__dirname, '../browser');
 export const getLocationById = (id: number): BucketLocation | undefined => {
     const data = readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8');
     const locations: BucketLocation[] = JSON.parse(data);
+
     return locations.find((loc) => loc.id === id);
 };

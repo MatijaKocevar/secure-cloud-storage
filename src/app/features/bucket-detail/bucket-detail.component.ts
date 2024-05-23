@@ -40,6 +40,7 @@ export class BucketDetailComponent implements OnInit {
 
     ngOnInit(): void {
         const id = Number(this.route.snapshot.paramMap.get('id'));
+
         this.bucketService.getBuckets().subscribe((buckets) => {
             this.bucket = buckets.find((b) => b.id === id);
             if (this.bucket) {
@@ -75,6 +76,7 @@ export class BucketDetailComponent implements OnInit {
 
     deleteSelectedFile(): void {
         if (!this.selectedFile) return;
+
         this.confirmAction = () => {
             this.fileService.deleteFile(this.selectedFile!.id).subscribe(() => {
                 this.files = this.files.filter((file) => file.id !== this.selectedFile!.id);
@@ -89,6 +91,7 @@ export class BucketDetailComponent implements OnInit {
 
     deleteBucket(): void {
         if (!this.bucket) return;
+
         this.confirmAction = () => {
             this.bucketService.deleteBucket(this.bucket!.id).subscribe(() => {
                 this.router.navigate(['/']);

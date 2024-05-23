@@ -28,6 +28,7 @@ export class BucketService {
 
     createBucket(bucket: Bucket): Observable<Bucket> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
         return this.http.post<Bucket>(`${this.apiUrl}/buckets`, bucket, { headers });
     }
 

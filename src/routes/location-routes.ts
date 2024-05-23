@@ -15,9 +15,11 @@ locationRouter.get('/', (req: Request, res: Response) => {
     try {
         const data = readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8');
         const locations: BucketLocation[] = JSON.parse(data);
+
         res.json(locations);
     } catch (error) {
         console.error('Error reading locations.json:', error);
+
         res.status(500).send('Error reading locations.json');
     }
 });
@@ -30,6 +32,7 @@ locationRouter.get('/:id', (req: Request, res: Response) => {
             readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8'),
         ) as BucketLocation[];
         const location = data.find((loc) => loc.id === locationId);
+
         if (location) {
             res.json(location);
         } else {
@@ -37,6 +40,7 @@ locationRouter.get('/:id', (req: Request, res: Response) => {
         }
     } catch (error) {
         console.error('Error reading location from locations.json:', error);
+
         res.status(500).send('Error reading location');
     }
 });

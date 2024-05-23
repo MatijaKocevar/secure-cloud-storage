@@ -28,6 +28,7 @@ export class FileService {
 
     uploadFile(file: BucketFile): Observable<BucketFile> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
         return this.http.post<BucketFile>(`${this.apiUrl}/files`, { ...file }, { headers });
     }
 
