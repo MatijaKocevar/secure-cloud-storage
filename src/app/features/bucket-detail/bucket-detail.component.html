@@ -77,4 +77,11 @@
             <p><strong>Available Space:</strong> {{ location!.availableSpace | fileSize }}</p>
         </div>
     </div>
+
+    <app-confirmation-modal
+        *ngIf="showModal"
+        [message]="modalMessage"
+        (confirm)="onModalConfirm()"
+        (cancel)="onModalCancel()"
+    ></app-confirmation-modal>
 </div>

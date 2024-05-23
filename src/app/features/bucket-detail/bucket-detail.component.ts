@@ -9,11 +9,12 @@ import { Bucket } from '../../core/models/bucket.model';
 import { BucketFile } from '../../core/models/file.model';
 import { BucketLocation } from '../../core/models/location.model';
 import { FileSizePipe } from '../../pipes/file-size.pipe';
+import { ConfirmationModalComponent } from '../../shared/confirmation-modal/confirmation-modal.component';
 
 @Component({
     selector: 'app-bucket-detail',
     standalone: true,
-    imports: [CommonModule, FormsModule, FileSizePipe],
+    imports: [CommonModule, FormsModule, FileSizePipe, ConfirmationModalComponent],
     templateUrl: './bucket-detail.component.html',
     styleUrls: ['./bucket-detail.component.scss'],
 })
@@ -25,6 +26,9 @@ export class BucketDetailComponent implements OnInit {
     selectedTab: 'files' | 'details' = 'files';
     selectedFile: BucketFile | null = null;
     location: BucketLocation | undefined;
+    showModal = false;
+    modalMessage = '';
+    confirmAction: (() => void) | null = null;
 
     constructor(
         private route: ActivatedRoute,
@@ -71,18 +75,28 @@ export class BucketDetailComponent implements OnInit {
 
     deleteSelectedFile(): void {
         if (!this.selectedFile) return;
-        this.fileService.deleteFile(this.selectedFile.id).subscribe(() => {
-            this.files = this.files.filter((file) => file.id !== this.selectedFile!.id);
-            this.selectedFile = null;
-            this.loadLocation(this.bucket!.locationId);
-        });
+        this.confirmAction = () => {
+            this.fileService.deleteFile(this.selectedFile!.id).subscribe(() => {
+                this.files = this.files.filter((file) => file.id !== this.selectedFile!.id);
+                this.selectedFile = null;
+                this.loadLocation(this.bucket!.locationId);
+                this.showModal = false;
+            });
+        };
+        this.modalMessage = 'Do you really want to delete this file?';
+        this.showModal = true;
     }
 
     deleteBucket(): void {
         if (!this.bucket) return;
-        this.bucketService.deleteBucket(this.bucket.id).subscribe(() => {
-            this.router.navigate(['/']);
-        });
+        this.confirmAction = () => {
+            this.bucketService.deleteBucket(this.bucket!.id).subscribe(() => {
+                this.router.navigate(['/']);
+                this.showModal = false;
+            });
+        };
+        this.modalMessage = 'Do you really want to delete this bucket?';
+        this.showModal = true;
     }
 
     triggerFileInput(): void {
@@ -120,5 +134,15 @@ export class BucketDetailComponent implements OnInit {
             });
         };
         reader.readAsDataURL(file);
+    }
+
+    onModalConfirm(): void {
+        if (this.confirmAction) {
+            this.confirmAction();
+        }
+    }
+
+    onModalCancel(): void {
+        this.showModal = false;
     }
 }
