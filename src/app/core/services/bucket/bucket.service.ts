@@ -28,7 +28,8 @@ export class BucketService {
 
     createBucket(bucket: Bucket): Observable<Bucket> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
+        bucket.createdAt = new Date();
+        bucket.updatedAt = new Date();
         return this.http.post<Bucket>(`${this.apiUrl}/buckets`, bucket, { headers });
     }
 

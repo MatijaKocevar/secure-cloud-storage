@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { readFileSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { BucketFile } from '../app/core/models/file.model';
+import { Bucket } from '../app/core/models/bucket.model';
 import { BucketLocation } from '../app/core/models/location.model';
 import { fileURLToPath } from 'url';
 
@@ -23,7 +24,6 @@ fileRouter.get('/', (req: Request, res: Response) => {
         res.json(files);
     } catch (error) {
         console.error('Error reading files.json:', error);
-
         res.status(500).send('Error reading files.json');
     }
 });
@@ -48,13 +48,22 @@ fileRouter.post('/', (req: Request, res: Response) => {
             writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
             writeFileSync(join(browserDistFolder, 'assets/data/locations.json'), JSON.stringify(locations, null, 2));
 
+            const bucketsData = readFileSync(join(browserDistFolder, 'assets/data/buckets.json'), 'utf8');
+            const buckets: Bucket[] = JSON.parse(bucketsData);
+            const bucket = buckets.find((b) => b.id === newFile.bucketId);
+
+            if (bucket) {
+                bucket.updatedAt = new Date();
+
+                writeFileSync(join(browserDistFolder, 'assets/data/buckets.json'), JSON.stringify(buckets, null, 2));
+            }
+
             res.json(newFile);
         } else {
             res.status(400).send('Not enough available space to upload the file.');
         }
     } catch (error) {
         console.error('Error updating files.json:', error);
-
         res.status(500).send('Error updating files.json');
     }
 });
@@ -90,7 +99,6 @@ fileRouter.delete('/:id', (req: Request, res: Response) => {
         }
     } catch (error) {
         console.error('Error deleting file from files.json:', error);
-
         res.status(500).send('Error deleting file');
     }
 });
