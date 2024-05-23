@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import bootstrap from './src/main.server';
 import { Bucket } from './src/app/core/models/bucket.model';
 import { BucketFile } from './src/app/core/models/file.model';
+import { BucketLocation } from './src/app/core/models/location.model';
 
 // Define __filename and __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -71,6 +72,13 @@ export function app(): express.Express {
         data = data.filter((file) => file.id !== fileId);
         writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
         res.sendStatus(204);
+    });
+
+    // API to get locations
+    server.get('/api/locations', (req: Request, res: Response) => {
+        const data = readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8');
+        const locations: BucketLocation[] = JSON.parse(data);
+        res.json(locations);
     });
 
     // Serve static files from /browser
