@@ -6,18 +6,19 @@ import { BucketService } from '../../core/services/bucket/bucket.service';
 import { FileService } from '../../core/services/file/file.service';
 import { Bucket } from '../../core/models/bucket.model';
 import { BucketFile } from '../../core/models/file.model';
+import { FileSizePipe } from '../../pipes/file-size.pipe';
 
 @Component({
     selector: 'app-bucket-detail',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, FileSizePipe],
     templateUrl: './bucket-detail.component.html',
     styleUrls: ['./bucket-detail.component.scss'],
 })
 export class BucketDetailComponent implements OnInit {
     bucket: Bucket | undefined;
     files: BucketFile[] = [];
-    selectedFile: BucketFile | null = null;
+    selectedFile: BucketFile | undefined;
     selectedTab: 'files' | 'details' = 'files';
 
     constructor(
@@ -58,7 +59,7 @@ export class BucketDetailComponent implements OnInit {
         if (this.selectedFile) {
             this.fileService.deleteFile(this.selectedFile.id).subscribe(() => {
                 this.files = this.files.filter((file) => file.id !== this.selectedFile!.id);
-                this.selectedFile = null;
+                this.selectedFile = undefined;
             });
         }
     }

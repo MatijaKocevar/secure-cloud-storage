@@ -36,20 +36,30 @@
         <div *ngIf="selectedTab === 'files'" id="files-tab">
             <h3>Files</h3>
             <p>Total Files: {{ getTotalFiles() }}</p>
-            <ul class="list-group mb-3">
-                <li
-                    class="list-group-item"
-                    *ngFor="let file of files"
-                    (click)="selectFile(file)"
-                    [class.active]="file === selectedFile"
-                    role="button"
-                    tabindex="0"
-                    (keydown.enter)="selectFile(file)"
-                    (keydown.space)="selectFile(file)"
-                >
-                    {{ file.name }}
-                </li>
-            </ul>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Last Modified</th>
+                        <th scope="col">Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="let file of files"
+                        (click)="selectFile(file)"
+                        [class.table-active]="file === selectedFile"
+                        role="button"
+                        tabindex="0"
+                        (keydown.enter)="selectFile(file)"
+                        (keydown.space)="selectFile(file)"
+                    >
+                        <td>{{ file.name }}</td>
+                        <td>{{ file.updatedAt | date: 'd.M.yyyy' }}</td>
+                        <td>{{ file.size | fileSize }}</td>
+                    </tr>
+                </tbody>
+            </table>
             <button class="btn btn-primary" (click)="uploadFile()">Upload Object</button>
             <button class="btn btn-danger ml-2" [disabled]="!selectedFile" (click)="deleteSelectedFile()">
                 Delete Selected File
