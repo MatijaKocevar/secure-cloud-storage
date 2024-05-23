@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BucketService } from '../../core/services/bucket/bucket.service';
@@ -26,6 +26,7 @@ export class BucketDetailComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private bucketService: BucketService,
         private fileService: FileService,
         private locationService: LocationService,
@@ -37,7 +38,7 @@ export class BucketDetailComponent implements OnInit {
             this.bucket = buckets.find((b) => b.id === id);
             if (this.bucket) {
                 this.loadFiles(this.bucket.id);
-                this.loadLocation(this.bucket.id);
+                this.loadLocation(this.bucket.locationId);
             }
         });
     }
@@ -71,6 +72,13 @@ export class BucketDetailComponent implements OnInit {
         this.fileService.deleteFile(this.selectedFile.id).subscribe(() => {
             this.files = this.files.filter((file) => file.id !== this.selectedFile!.id);
             this.selectedFile = null;
+        });
+    }
+
+    deleteBucket(): void {
+        if (!this.bucket) return;
+        this.bucketService.deleteBucket(this.bucket.id).subscribe(() => {
+            this.router.navigate(['/']);
         });
     }
 

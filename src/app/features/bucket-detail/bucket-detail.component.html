@@ -1,5 +1,7 @@
 <div class="container mt-5" *ngIf="bucket">
-    <h1>{{ bucket.name }}</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>{{ bucket.name }}</h1>
+    </div>
     <ul class="nav nav-tabs">
         <li class="nav-item">
             <a
@@ -65,6 +67,9 @@
             </button>
         </div>
         <div *ngIf="selectedTab === 'details'" id="details-tab">
+            <div class="d-flex justify-content-between align-items-center">
+                <button class="btn btn-danger" (click)="deleteBucket()">Delete Bucket</button>
+            </div>
             <p><strong>Bucket Name:</strong> {{ bucket.name }}</p>
             <p><strong>Location:</strong> {{ location?.name }}</p>
             <p><strong>Storage Size:</strong> {{ location!.size | fileSize }}</p>

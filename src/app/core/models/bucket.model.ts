@@ -1,5 +1,6 @@
 export interface Bucket {
     id: number;
     name: string;
-    location: string;
+    locationId: number;
+    locationName?: string;
 }

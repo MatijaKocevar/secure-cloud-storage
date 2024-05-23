@@ -30,4 +30,8 @@ export class BucketService {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
         return this.http.post<Bucket>(`${this.apiUrl}/buckets`, bucket, { headers });
     }
+
+    deleteBucket(bucketId: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/buckets/${bucketId}`);
+    }
 }

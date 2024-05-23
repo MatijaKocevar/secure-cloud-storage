@@ -26,21 +26,63 @@ export function app(): express.Express {
 
     server.use(express.json());
 
+    // Helper function to get location name by ID
+    const getLocationNameById = (id: number): string => {
+        const data = readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8');
+        const locations: BucketLocation[] = JSON.parse(data);
+        const location = locations.find((loc) => loc.id === id);
+        return location ? location.name : 'Unknown';
+    };
+
     // API to get buckets
     server.get('/api/buckets', (req: Request, res: Response) => {
-        const data = readFileSync(join(browserDistFolder, 'assets/data/buckets.json'), 'utf8');
-        const buckets: Bucket[] = JSON.parse(data);
-        res.json(buckets);
+        try {
+            const data = readFileSync(join(browserDistFolder, 'assets/data/buckets.json'), 'utf8');
+            const buckets: Bucket[] = JSON.parse(data).map((bucket: Bucket) => ({
+                ...bucket,
+                locationName: getLocationNameById(bucket.locationId),
+            }));
+            res.json(buckets);
+        } catch (error) {
+            console.error('Error reading buckets.json:', error);
+            res.status(500).send('Error reading buckets.json');
+        }
     });
 
     // API to create a bucket
     server.post('/api/buckets', (req: Request, res: Response) => {
-        const data = JSON.parse(readFileSync(join(browserDistFolder, 'assets/data/buckets.json'), 'utf8')) as Bucket[];
-        const newBucket: Bucket = req.body;
-        newBucket.id = data.length ? Math.max(...data.map((b) => b.id)) + 1 : 1;
-        data.push(newBucket);
-        writeFileSync(join(browserDistFolder, 'assets/data/buckets.json'), JSON.stringify(data, null, 2));
-        res.json(newBucket);
+        try {
+            const data = JSON.parse(
+                readFileSync(join(browserDistFolder, 'assets/data/buckets.json'), 'utf8'),
+            ) as Bucket[];
+            const newBucket: Bucket = req.body;
+            newBucket.id = data.length ? Math.max(...data.map((b) => b.id)) + 1 : 1;
+            data.push(newBucket);
+            writeFileSync(join(browserDistFolder, 'assets/data/buckets.json'), JSON.stringify(data, null, 2));
+            res.json({
+                ...newBucket,
+                locationName: getLocationNameById(newBucket.locationId),
+            });
+        } catch (error) {
+            console.error('Error updating buckets.json:', error);
+            res.status(500).send('Error updating buckets.json');
+        }
+    });
+
+    // API to delete a bucket
+    server.delete('/api/buckets/:id', (req: Request, res: Response) => {
+        try {
+            const bucketId = parseInt(req.params['id'], 10);
+            let data = JSON.parse(
+                readFileSync(join(browserDistFolder, 'assets/data/buckets.json'), 'utf8'),
+            ) as Bucket[];
+            data = data.filter((bucket) => bucket.id !== bucketId);
+            writeFileSync(join(browserDistFolder, 'assets/data/buckets.json'), JSON.stringify(data, null, 2));
+            res.sendStatus(204);
+        } catch (error) {
+            console.error('Error deleting bucket from buckets.json:', error);
+            res.status(500).send('Error deleting bucket');
+        }
     });
 
     // API to get files by bucketId

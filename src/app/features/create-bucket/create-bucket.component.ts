@@ -16,7 +16,7 @@ import { BucketLocation } from '../../core/models/location.model';
 export class CreateBucketComponent implements OnInit {
     @Output() bucketCreated = new EventEmitter<Bucket>();
 
-    bucket: Bucket = { id: 0, name: '', location: '' };
+    bucket: Partial<Bucket> = { id: 0, name: '', locationId: 0 };
     locations: BucketLocation[] = [];
     errorMessage = '';
 
@@ -41,7 +41,7 @@ export class CreateBucketComponent implements OnInit {
         const observer = {
             next: (createdBucket: Bucket) => {
                 this.bucketCreated.emit(createdBucket);
-                this.bucket = { id: 0, name: '', location: '' };
+                this.bucket = { id: 0, name: '', locationId: 0 };
                 this.errorMessage = '';
             },
             error: () => {
@@ -49,6 +49,6 @@ export class CreateBucketComponent implements OnInit {
             },
         };
 
-        this.bucketService.createBucket(this.bucket).subscribe(observer);
+        this.bucketService.createBucket(this.bucket as Bucket).subscribe(observer);
     }
 }
