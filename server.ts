@@ -87,53 +87,80 @@ export function app(): express.Express {
 
     // API to get files by bucketId
     server.get('/api/files', (req: Request, res: Response) => {
-        const bucketId = parseInt(req.query['bucketId'] as string, 10);
-        const data = JSON.parse(
-            readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
-        ) as BucketFile[];
-        const files = data.filter((file) => file.bucketId === bucketId);
-        res.json(files);
+        try {
+            const bucketId = parseInt(req.query['bucketId'] as string, 10);
+            const data = JSON.parse(
+                readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
+            ) as BucketFile[];
+            const files = data.filter((file) => file.bucketId === bucketId);
+            res.json(files);
+        } catch (error) {
+            console.error('Error reading files.json:', error);
+            res.status(500).send('Error reading files.json');
+        }
     });
 
     // API to upload a file
     server.post('/api/files', (req: Request, res: Response) => {
-        const data = JSON.parse(
-            readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
-        ) as BucketFile[];
-        const newFile: BucketFile = req.body;
-        newFile.id = data.length ? Math.max(...data.map((f) => f.id)) + 1 : 1;
-        data.push(newFile);
-        writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
-        res.json(newFile);
+        try {
+            const data = JSON.parse(
+                readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
+            ) as BucketFile[];
+            const newFile: BucketFile = req.body;
+            newFile.id = data.length ? Math.max(...data.map((f) => f.id)) + 1 : 1;
+            data.push(newFile);
+            writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
+            res.json(newFile);
+        } catch (error) {
+            console.error('Error updating files.json:', error);
+            res.status(500).send('Error updating files.json');
+        }
     });
 
     // API to delete a file
     server.delete('/api/files/:id', (req: Request, res: Response) => {
-        const fileId = parseInt(req.params['id'], 10);
-        let data = JSON.parse(readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8')) as BucketFile[];
-        data = data.filter((file) => file.id !== fileId);
-        writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
-        res.sendStatus(204);
+        try {
+            const fileId = parseInt(req.params['id'], 10);
+            let data = JSON.parse(
+                readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
+            ) as BucketFile[];
+            data = data.filter((file) => file.id !== fileId);
+            writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
+            res.sendStatus(204);
+        } catch (error) {
+            console.error('Error deleting file from files.json:', error);
+            res.status(500).send('Error deleting file');
+        }
     });
 
     // API to get locations
     server.get('/api/locations', (req: Request, res: Response) => {
-        const data = readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8');
-        const locations: BucketLocation[] = JSON.parse(data);
-        res.json(locations);
+        try {
+            const data = readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8');
+            const locations: BucketLocation[] = JSON.parse(data);
+            res.json(locations);
+        } catch (error) {
+            console.error('Error reading locations.json:', error);
+            res.status(500).send('Error reading locations.json');
+        }
     });
 
     // API to get a location by ID
     server.get('/api/locations/:id', (req: Request, res: Response) => {
-        const locationId = parseInt(req.params['id'], 10);
-        const data = JSON.parse(
-            readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8'),
-        ) as BucketLocation[];
-        const location = data.find((loc) => loc.id === locationId);
-        if (location) {
-            res.json(location);
-        } else {
-            res.status(404).send('Location not found');
+        try {
+            const locationId = parseInt(req.params['id'], 10);
+            const data = JSON.parse(
+                readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8'),
+            ) as BucketLocation[];
+            const location = data.find((loc) => loc.id === locationId);
+            if (location) {
+                res.json(location);
+            } else {
+                res.status(404).send('Location not found');
+            }
+        } catch (error) {
+            console.error('Error reading location from locations.json:', error);
+            res.status(500).send('Error reading location');
         }
     });
 
