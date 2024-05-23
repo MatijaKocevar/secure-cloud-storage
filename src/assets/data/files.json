@@ -1,26 +1,46 @@
 [
     {
         "id": 1,
-        "name": "file1.txt",
+        "name": "test1.txt",
         "bucketId": 1,
-        "size": 1024,
+        "locationId": 10,
+        "size": 7,
         "type": "text/plain",
-        "createdAt": "2024-01-01T12:00:00Z"
+        "createdAt": "2024-05-23T16:26:54.953Z",
+        "updatedAt": "2024-05-23T16:26:54.953Z",
+        "content": "IEhlbGxvCg=="
     },
     {
         "id": 2,
-        "name": "file2.jpg",
+        "name": "test2.txt",
         "bucketId": 1,
-        "size": 2048,
-        "type": "image/jpeg",
-        "createdAt": "2024-02-01T12:00:00Z"
+        "locationId": 10,
+        "size": 6,
+        "type": "text/plain",
+        "createdAt": "2024-05-23T16:26:57.601Z",
+        "updatedAt": "2024-05-23T16:26:57.601Z",
+        "content": "V29ybGQK"
     },
     {
         "id": 3,
-        "name": "file3.pdf",
+        "name": "test3.txt",
+        "bucketId": 1,
+        "locationId": 10,
+        "size": 5,
+        "type": "text/plain",
+        "createdAt": "2024-05-23T16:26:59.333Z",
+        "updatedAt": "2024-05-23T16:26:59.333Z",
+        "content": "VGVzdAo="
+    },
+    {
+        "id": 4,
+        "name": "test1.txt",
         "bucketId": 2,
-        "size": 4096,
-        "type": "application/pdf",
-        "createdAt": "2024-03-01T12:00:00Z"
+        "locationId": 20,
+        "size": 7,
+        "type": "text/plain",
+        "createdAt": "2024-05-23T16:27:17.453Z",
+        "updatedAt": "2024-05-23T16:27:17.453Z",
+        "content": "IEhlbGxvCg=="
     }
 ]

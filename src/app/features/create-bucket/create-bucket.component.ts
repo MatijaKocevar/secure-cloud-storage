@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Bucket } from '../../core/models/bucket.model';
 import { BucketService } from '../../core/services/bucket/bucket.service';
+import { LocationService } from '../../core/services/location/location.service';
+import { BucketLocation } from '../../core/models/location.model';
 
 @Component({
     selector: 'app-create-bucket',
@@ -11,21 +13,35 @@ import { BucketService } from '../../core/services/bucket/bucket.service';
     templateUrl: './create-bucket.component.html',
     styleUrls: ['./create-bucket.component.scss'],
 })
-export class CreateBucketComponent {
+export class CreateBucketComponent implements OnInit {
     @Output() bucketCreated = new EventEmitter<Bucket>();
 
-    bucket: Bucket = { id: 0, name: '', location: '' };
-    locations = ['Location 1', 'Location 2', 'Location 3'];
+    bucket: Partial<Bucket> = { id: 0, name: '', locationId: 0 };
+    locations: BucketLocation[] = [];
     errorMessage = '';
 
-    constructor(private bucketService: BucketService) {}
+    constructor(
+        private bucketService: BucketService,
+        private locationService: LocationService,
+    ) {}
+
+    ngOnInit() {
+        this.locationService.getLocations().subscribe({
+            next: (locations: BucketLocation[]) => {
+                this.locations = locations;
+            },
+            error: (error) => {
+                console.error('Error fetching locations', error);
+            },
+        });
+    }
 
     createBucket() {
         console.log('CreateBucketComponent: createBucket called');
         const observer = {
             next: (createdBucket: Bucket) => {
                 this.bucketCreated.emit(createdBucket);
-                this.bucket = { id: 0, name: '', location: '' };
+                this.bucket = { id: 0, name: '', locationId: 0 };
                 this.errorMessage = '';
             },
             error: () => {
@@ -33,6 +49,6 @@ export class CreateBucketComponent {
             },
         };
 
-        this.bucketService.createBucket(this.bucket).subscribe(observer);
+        this.bucketService.createBucket(this.bucket as Bucket).subscribe(observer);
     }
 }

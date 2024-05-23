@@ -15,9 +15,9 @@
             (keydown.space)="goToBucketDetail(bucket.id)"
             tabindex="0"
             role="button"
-            [attr.aria-label]="'Bucket ' + bucket.name + ' at ' + bucket.location"
+            [attr.aria-label]="'Bucket ' + bucket.name + ' at ' + bucket.locationName"
         >
-            {{ bucket.name }} - {{ bucket.location }}
+            {{ bucket.name }} - {{ bucket.locationName }}
         </li>
     </ul>
 </div>

@@ -2,7 +2,7 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { isPlatformServer } from '@angular/common';
-import { File } from '../../models/file.model';
+import { BucketFile } from '../../models/file.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -22,13 +22,13 @@ export class FileService {
         }
     }
 
-    getFiles(bucketId: number): Observable<File[]> {
-        return this.http.get<File[]>(`${this.apiUrl}/files?bucketId=${bucketId}`);
+    getFiles(bucketId: number): Observable<BucketFile[]> {
+        return this.http.get<BucketFile[]>(`${this.apiUrl}/files?bucketId=${bucketId}`);
     }
 
-    uploadFile(bucketId: number, file: File): Observable<File> {
+    uploadFile(file: BucketFile): Observable<BucketFile> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
-        return this.http.post<File>(`${this.apiUrl}/files`, { ...file, bucketId }, { headers });
+        return this.http.post<BucketFile>(`${this.apiUrl}/files`, { ...file }, { headers });
     }
 
     deleteFile(fileId: number): Observable<void> {
