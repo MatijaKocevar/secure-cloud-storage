@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "file1.txt",
+        "bucketId": 1,
+        "size": 1024,
+        "type": "text/plain",
+        "createdAt": "2024-01-01T12:00:00Z"
+    },
+    {
+        "id": 2,
+        "name": "file2.jpg",
+        "bucketId": 1,
+        "size": 2048,
+        "type": "image/jpeg",
+        "createdAt": "2024-02-01T12:00:00Z"
+    },
+    {
+        "id": 3,
+        "name": "file3.pdf",
+        "bucketId": 2,
+        "size": 4096,
+        "type": "application/pdf",
+        "createdAt": "2024-03-01T12:00:00Z"
+    }
+]
