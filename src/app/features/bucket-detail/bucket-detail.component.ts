@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,6 +18,8 @@ import { FileSizePipe } from '../../pipes/file-size.pipe';
     styleUrls: ['./bucket-detail.component.scss'],
 })
 export class BucketDetailComponent implements OnInit {
+    @ViewChild('fileInput') fileInput!: ElementRef;
+
     bucket: Bucket | undefined;
     files: BucketFile[] = [];
     selectedTab: 'files' | 'details' = 'files';
@@ -72,6 +74,7 @@ export class BucketDetailComponent implements OnInit {
         this.fileService.deleteFile(this.selectedFile.id).subscribe(() => {
             this.files = this.files.filter((file) => file.id !== this.selectedFile!.id);
             this.selectedFile = null;
+            this.loadLocation(this.bucket!.locationId);
         });
     }
 
@@ -82,7 +85,40 @@ export class BucketDetailComponent implements OnInit {
         });
     }
 
-    uploadFile(): void {
-        // TODO: Implement file upload logic
+    triggerFileInput(): void {
+        this.fileInput.nativeElement.click();
+    }
+
+    uploadFile(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        if (!input.files?.length) return;
+
+        const file = input.files[0];
+        if (this.location && this.location.availableSpace < file.size) {
+            alert('Not enough available space to upload the file.');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            const base64Content = (reader.result as string).split(',')[1];
+            const newFile: BucketFile = {
+                id: 0,
+                name: file.name,
+                bucketId: this.bucket!.id,
+                locationId: this.bucket!.locationId,
+                size: file.size,
+                type: file.type,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                content: base64Content,
+            };
+
+            this.fileService.uploadFile(newFile).subscribe((uploadedFile) => {
+                this.files.push(uploadedFile);
+                this.loadLocation(this.bucket!.locationId);
+            });
+        };
+        reader.readAsDataURL(file);
     }
 }

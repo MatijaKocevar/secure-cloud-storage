@@ -61,7 +61,8 @@
                     </tr>
                 </tbody>
             </table>
-            <button class="btn btn-primary" (click)="uploadFile()">Upload Object</button>
+            <button class="btn btn-primary" (click)="triggerFileInput()">Upload Object</button>
+            <input type="file" #fileInput (change)="uploadFile($event)" style="display: none" />
             <button class="btn btn-danger ml-2" [disabled]="!selectedFile" (click)="deleteSelectedFile()">
                 Delete Selected File
             </button>
@@ -73,6 +74,7 @@
             <p><strong>Bucket Name:</strong> {{ bucket.name }}</p>
             <p><strong>Location:</strong> {{ location?.name }}</p>
             <p><strong>Storage Size:</strong> {{ location!.size | fileSize }}</p>
+            <p><strong>Available Space:</strong> {{ location!.availableSpace | fileSize }}</p>
         </div>
     </div>
 </div>

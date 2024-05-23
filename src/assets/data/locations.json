@@ -1,4 +1,4 @@
 [
-    { "id": 10, "name": "Location 1", "size": 5263618048 },
-    { "id": 20, "name": "Location 2", "size": 5263618048 }
+    { "id": 10, "name": "Location 1", "size": 100, "availableSpace": 82 },
+    { "id": 20, "name": "Location 2", "size": 100, "availableSpace": 93 }
 ]

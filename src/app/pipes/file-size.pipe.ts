@@ -13,7 +13,7 @@ export class FileSizePipe implements PipeTransform {
         } else if (size >= 1024) {
             return Math.round(size / 1024) + ' KB';
         } else {
-            return size + ' bytes';
+            return size + ' B';
         }
     }
 }

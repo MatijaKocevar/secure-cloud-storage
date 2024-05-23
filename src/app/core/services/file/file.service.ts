@@ -26,9 +26,9 @@ export class FileService {
         return this.http.get<BucketFile[]>(`${this.apiUrl}/files?bucketId=${bucketId}`);
     }
 
-    uploadFile(bucketId: number, file: BucketFile): Observable<BucketFile> {
+    uploadFile(file: BucketFile): Observable<BucketFile> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
-        return this.http.post<BucketFile>(`${this.apiUrl}/files`, { ...file, bucketId }, { headers });
+        return this.http.post<BucketFile>(`${this.apiUrl}/files`, { ...file }, { headers });
     }
 
     deleteFile(fileId: number): Observable<void> {

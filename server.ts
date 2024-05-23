@@ -24,14 +24,14 @@ export function app(): express.Express {
     server.set('view engine', 'html');
     server.set('views', browserDistFolder);
 
-    server.use(express.json());
+    server.use(express.json({ limit: '5mb' }));
+    server.use(express.urlencoded({ limit: '5mb', extended: true }));
 
-    // Helper function to get location name by ID
-    const getLocationNameById = (id: number): string => {
+    // Helper function to get location by ID
+    const getLocationById = (id: number): BucketLocation | undefined => {
         const data = readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8');
         const locations: BucketLocation[] = JSON.parse(data);
-        const location = locations.find((loc) => loc.id === id);
-        return location ? location.name : 'Unknown';
+        return locations.find((loc) => loc.id === id);
     };
 
     // API to get buckets
@@ -40,7 +40,7 @@ export function app(): express.Express {
             const data = readFileSync(join(browserDistFolder, 'assets/data/buckets.json'), 'utf8');
             const buckets: Bucket[] = JSON.parse(data).map((bucket: Bucket) => ({
                 ...bucket,
-                locationName: getLocationNameById(bucket.locationId),
+                locationName: getLocationById(bucket.locationId)?.name || 'Unknown',
             }));
             res.json(buckets);
         } catch (error) {
@@ -61,7 +61,7 @@ export function app(): express.Express {
             writeFileSync(join(browserDistFolder, 'assets/data/buckets.json'), JSON.stringify(data, null, 2));
             res.json({
                 ...newBucket,
-                locationName: getLocationNameById(newBucket.locationId),
+                locationName: getLocationById(newBucket.locationId)?.name || 'Unknown',
             });
         } catch (error) {
             console.error('Error updating buckets.json:', error);
@@ -106,11 +106,25 @@ export function app(): express.Express {
             const data = JSON.parse(
                 readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
             ) as BucketFile[];
+            const locationsData = readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8');
+            const locations: BucketLocation[] = JSON.parse(locationsData);
+
             const newFile: BucketFile = req.body;
-            newFile.id = data.length ? Math.max(...data.map((f) => f.id)) + 1 : 1;
-            data.push(newFile);
-            writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
-            res.json(newFile);
+            const location = locations.find((loc) => loc.id === newFile.locationId);
+
+            if (location && location.availableSpace >= newFile.size) {
+                newFile.id = data.length ? Math.max(...data.map((f) => f.id)) + 1 : 1;
+                data.push(newFile);
+                location.availableSpace -= newFile.size;
+                writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
+                writeFileSync(
+                    join(browserDistFolder, 'assets/data/locations.json'),
+                    JSON.stringify(locations, null, 2),
+                );
+                res.json(newFile);
+            } else {
+                res.status(400).send('Not enough available space to upload the file.');
+            }
         } catch (error) {
             console.error('Error updating files.json:', error);
             res.status(500).send('Error updating files.json');
@@ -124,9 +138,28 @@ export function app(): express.Express {
             let data = JSON.parse(
                 readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
             ) as BucketFile[];
-            data = data.filter((file) => file.id !== fileId);
-            writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
-            res.sendStatus(204);
+            const fileToDelete = data.find((file) => file.id === fileId);
+
+            if (fileToDelete) {
+                data = data.filter((file) => file.id !== fileId);
+                const locationsData = readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8');
+                const locations: BucketLocation[] = JSON.parse(locationsData);
+                const location = locations.find((loc) => loc.id === fileToDelete.locationId);
+
+                if (location) {
+                    location.availableSpace += fileToDelete.size;
+                    writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
+                    writeFileSync(
+                        join(browserDistFolder, 'assets/data/locations.json'),
+                        JSON.stringify(locations, null, 2),
+                    );
+                    res.sendStatus(204);
+                } else {
+                    res.status(400).send('Location not found for the file.');
+                }
+            } else {
+                res.status(404).send('File not found.');
+            }
         } catch (error) {
             console.error('Error deleting file from files.json:', error);
             res.status(500).send('Error deleting file');
