@@ -6,9 +6,5 @@ import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/
 import { provideClientHydration } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
-    providers: [
-        provideRouter(routes),
-        provideHttpClient(withInterceptors([]), withFetch()),
-        provideClientHydration()
-    ],
+    providers: [provideRouter(routes), provideHttpClient(withInterceptors([]), withFetch()), provideClientHydration()],
 };
