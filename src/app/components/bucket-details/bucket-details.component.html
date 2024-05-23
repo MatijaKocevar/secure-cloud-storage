@@ -4,7 +4,6 @@
 <p><strong>Bucket Name:</strong> {{ bucket.name }}</p>
 <p><strong>Location:</strong> {{ location.name }}</p>
 <p><strong>Storage Size:</strong> {{ location.size | fileSize }}</p>
-<p><strong>Available Space:</strong> {{ location.availableSpace | fileSize }}</p>
 <app-confirmation-modal
     *ngIf="showModal"
     [message]="modalMessage"

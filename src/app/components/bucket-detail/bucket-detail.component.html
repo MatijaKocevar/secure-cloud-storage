@@ -11,7 +11,8 @@
                 [files]="files"
                 [bucketId]="bucket.id"
                 [location]="location!"
-                (fileDeleted)="loadLocation(bucket.locationId)"
+                (fileDeleted)="deleteFileFromList($event)"
+                (availableSpaceUpdated)="updateAvailableSpace()"
             ></app-bucket-files>
         </div>
         <div *ngIf="selectedTab === 'details'" id="details-tab">

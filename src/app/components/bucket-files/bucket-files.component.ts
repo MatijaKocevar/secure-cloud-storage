@@ -17,7 +17,8 @@ export class BucketFilesComponent {
     @Input() files: BucketFile[] = [];
     @Input() bucketId!: number;
     @Input() location!: BucketLocation;
-    @Output() fileDeleted = new EventEmitter<void>();
+    @Output() fileDeleted = new EventEmitter<number>();
+    @Output() availableSpaceUpdated = new EventEmitter<void>();
     @ViewChild('fileInput') fileInput!: ElementRef;
     selectedFile: BucketFile | null = null;
     showModal = false;
@@ -40,8 +41,9 @@ export class BucketFilesComponent {
         this.confirmAction = () => {
             this.fileService.deleteFile(this.selectedFile!.id).subscribe(() => {
                 this.files = this.files.filter((file) => file.id !== this.selectedFile!.id);
+                this.fileDeleted.emit(this.selectedFile!.id);
+                this.availableSpaceUpdated.emit();
                 this.selectedFile = null;
-                this.fileDeleted.emit();
                 this.showModal = false;
             });
         };
@@ -80,7 +82,7 @@ export class BucketFilesComponent {
 
             this.fileService.uploadFile(newFile).subscribe((uploadedFile) => {
                 this.files.push(uploadedFile);
-                this.fileDeleted.emit();
+                this.availableSpaceUpdated.emit();
             });
         };
         reader.readAsDataURL(file);

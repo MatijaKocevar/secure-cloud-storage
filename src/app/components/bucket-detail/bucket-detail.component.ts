@@ -60,6 +60,19 @@ export class BucketDetailComponent implements OnInit {
         });
     }
 
+    deleteFileFromList(fileId: number): void {
+        this.files = this.files.filter((file) => file.id !== fileId);
+        if (this.bucket) {
+            this.loadLocation(this.bucket.locationId);
+        }
+    }
+
+    updateAvailableSpace(): void {
+        if (this.bucket) {
+            this.loadLocation(this.bucket.locationId);
+        }
+    }
+
     onBucketDeleted(): void {
         this.router.navigate(['/']);
     }
