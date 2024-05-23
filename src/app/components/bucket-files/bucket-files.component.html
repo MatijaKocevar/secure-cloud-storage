@@ -18,7 +18,7 @@
             (keydown.space)="selectFile(file)"
         >
             <td>{{ file.name }}</td>
-            <td>{{ file.updatedAt | date: 'd.M.yyyy' }}</td>
+            <td>{{ file.lastModified | date: 'd.M.yyyy' }}</td>
             <td>{{ file.size | fileSize }}</td>
         </tr>
     </tbody>

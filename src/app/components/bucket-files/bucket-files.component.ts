@@ -75,8 +75,7 @@ export class BucketFilesComponent {
                 locationId: this.location.id,
                 size: file.size,
                 type: file.type,
-                createdAt: new Date(),
-                updatedAt: new Date(),
+                lastModified: file.lastModified ? new Date(file.lastModified) : new Date(),
                 content: base64Content,
             };
 
