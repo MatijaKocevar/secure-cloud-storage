@@ -1,87 +1,25 @@
 <div class="container mt-5" *ngIf="bucket">
-    <div class="d-flex justify-content-between align-items-center">
-        <h1>{{ bucket.name }}</h1>
-    </div>
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a
-                class="nav-link"
-                [class.active]="selectedTab === 'files'"
-                (click)="selectTab('files')"
-                (keydown.enter)="selectTab('files')"
-                (keydown.space)="selectTab('files')"
-                tabindex="0"
-                role="button"
-                [attr.aria-selected]="selectedTab === 'files'"
-                aria-controls="files-tab"
-            >
-                Files
-            </a>
-        </li>
-        <li class="nav-item">
-            <a
-                class="nav-link"
-                [class.active]="selectedTab === 'details'"
-                (click)="selectTab('details')"
-                (keydown.enter)="selectTab('details')"
-                (keydown.space)="selectTab('details')"
-                tabindex="0"
-                role="button"
-                [attr.aria-selected]="selectedTab === 'details'"
-                aria-controls="details-tab"
-            >
-                Details
-            </a>
-        </li>
-    </ul>
+    <app-bucket-header
+        [bucketName]="bucket.name"
+        [selectedTab]="selectedTab"
+        (tabSelected)="selectTab($event)"
+    ></app-bucket-header>
+
     <div class="tab-content mt-3">
         <div *ngIf="selectedTab === 'files'" id="files-tab">
-            <p>Total Files: {{ getTotalFiles() }}</p>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Last Modified</th>
-                        <th scope="col">Size</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr
-                        *ngFor="let file of files"
-                        (click)="selectFile(file)"
-                        [class.table-active]="file === selectedFile"
-                        role="button"
-                        tabindex="0"
-                        (keydown.enter)="selectFile(file)"
-                        (keydown.space)="selectFile(file)"
-                    >
-                        <td>{{ file.name }}</td>
-                        <td>{{ file.updatedAt | date: 'd.M.yyyy' }}</td>
-                        <td>{{ file.size | fileSize }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <button class="btn btn-primary" (click)="triggerFileInput()">Upload Object</button>
-            <input type="file" #fileInput (change)="uploadFile($event)" style="display: none" />
-            <button class="btn btn-danger ml-2" [disabled]="!selectedFile" (click)="deleteSelectedFile()">
-                Delete Selected File
-            </button>
+            <app-bucket-files
+                [files]="files"
+                [bucketId]="bucket.id"
+                [location]="location!"
+                (fileDeleted)="loadLocation(bucket.locationId)"
+            ></app-bucket-files>
         </div>
         <div *ngIf="selectedTab === 'details'" id="details-tab">
-            <div class="d-flex justify-content-between align-items-center">
-                <button class="btn btn-danger" (click)="deleteBucket()">Delete Bucket</button>
-            </div>
-            <p><strong>Bucket Name:</strong> {{ bucket.name }}</p>
-            <p><strong>Location:</strong> {{ location?.name }}</p>
-            <p><strong>Storage Size:</strong> {{ location!.size | fileSize }}</p>
-            <p><strong>Available Space:</strong> {{ location!.availableSpace | fileSize }}</p>
+            <app-bucket-details
+                [bucket]="bucket"
+                [location]="location!"
+                (bucketDeleted)="onBucketDeleted()"
+            ></app-bucket-details>
         </div>
     </div>
-
-    <app-confirmation-modal
-        *ngIf="showModal"
-        [message]="modalMessage"
-        (confirm)="onModalConfirm()"
-        (cancel)="onModalCancel()"
-    ></app-confirmation-modal>
 </div>

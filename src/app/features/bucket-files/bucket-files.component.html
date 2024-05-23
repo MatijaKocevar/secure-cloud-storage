@@ -1,0 +1,36 @@
+<p>Total Files: {{ getTotalFiles() }}</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Last Modified</th>
+            <th scope="col">Size</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr
+            *ngFor="let file of files"
+            (click)="selectFile(file)"
+            [class.table-active]="file === selectedFile"
+            role="button"
+            tabindex="0"
+            (keydown.enter)="selectFile(file)"
+            (keydown.space)="selectFile(file)"
+        >
+            <td>{{ file.name }}</td>
+            <td>{{ file.updatedAt | date: 'd.M.yyyy' }}</td>
+            <td>{{ file.size | fileSize }}</td>
+        </tr>
+    </tbody>
+</table>
+<button class="btn btn-primary" (click)="triggerFileInput()">Upload Object</button>
+<input type="file" #fileInput (change)="uploadFile($event)" style="display: none" />
+<button class="btn btn-danger ml-2" [disabled]="!selectedFile" (click)="deleteSelectedFile()">
+    Delete Selected File
+</button>
+<app-confirmation-modal
+    *ngIf="showModal"
+    [message]="modalMessage"
+    (confirm)="onModalConfirm()"
+    (cancel)="onModalCancel()"
+></app-confirmation-modal>
