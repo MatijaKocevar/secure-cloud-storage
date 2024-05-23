@@ -73,11 +73,33 @@ export function app(): express.Express {
     server.delete('/api/buckets/:id', (req: Request, res: Response) => {
         try {
             const bucketId = parseInt(req.params['id'], 10);
-            let data = JSON.parse(
+            let bucketsData = JSON.parse(
                 readFileSync(join(browserDistFolder, 'assets/data/buckets.json'), 'utf8'),
             ) as Bucket[];
-            data = data.filter((bucket) => bucket.id !== bucketId);
-            writeFileSync(join(browserDistFolder, 'assets/data/buckets.json'), JSON.stringify(data, null, 2));
+            let filesData = JSON.parse(
+                readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
+            ) as BucketFile[];
+
+            bucketsData = bucketsData.filter((bucket) => bucket.id !== bucketId);
+
+            const filesToDelete = filesData.filter((file) => file.bucketId === bucketId);
+
+            const locationsData = readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8');
+            const locations: BucketLocation[] = JSON.parse(locationsData);
+
+            filesToDelete.forEach((file) => {
+                const location = locations.find((loc) => loc.id === file.locationId);
+                if (location) {
+                    location.availableSpace += file.size;
+                }
+            });
+
+            filesData = filesData.filter((file) => file.bucketId !== bucketId);
+
+            writeFileSync(join(browserDistFolder, 'assets/data/buckets.json'), JSON.stringify(bucketsData, null, 2));
+            writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(filesData, null, 2));
+            writeFileSync(join(browserDistFolder, 'assets/data/locations.json'), JSON.stringify(locations, null, 2));
+
             res.sendStatus(204);
         } catch (error) {
             console.error('Error deleting bucket from buckets.json:', error);
