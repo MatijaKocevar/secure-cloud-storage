@@ -1,0 +1,52 @@
+<div class="container mt-5" *ngIf="bucket">
+    <h1>{{ bucket.name }}</h1>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a
+                class="nav-link"
+                [class.active]="selectedTab === 'files'"
+                (click)="selectTab('files')"
+                (keydown.enter)="selectTab('files')"
+                (keydown.space)="selectTab('files')"
+                tabindex="0"
+                role="button"
+                [attr.aria-selected]="selectedTab === 'files'"
+                aria-controls="files-tab"
+            >
+                Files
+            </a>
+        </li>
+        <li class="nav-item">
+            <a
+                class="nav-link"
+                [class.active]="selectedTab === 'details'"
+                (click)="selectTab('details')"
+                (keydown.enter)="selectTab('details')"
+                (keydown.space)="selectTab('details')"
+                tabindex="0"
+                role="button"
+                [attr.aria-selected]="selectedTab === 'details'"
+                aria-controls="details-tab"
+            >
+                Details
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content mt-3">
+        <div *ngIf="selectedTab === 'files'" id="files-tab">
+            <h3>Files</h3>
+            <p>Total Files: {{ getTotalFiles() }}</p>
+            <ul class="list-group mb-3">
+                <li class="list-group-item" *ngFor="let file of files">
+                    {{ file.name }}
+                    <button class="btn btn-sm btn-danger float-right" (click)="deleteFile(file.id)">Delete</button>
+                </li>
+            </ul>
+            <button class="btn btn-primary" (click)="uploadFile()">Upload Object</button>
+        </div>
+        <div *ngIf="selectedTab === 'details'" id="details-tab">
+            <h3>Details</h3>
+            <!-- Add details content here -->
+        </div>
+    </div>
+</div>
