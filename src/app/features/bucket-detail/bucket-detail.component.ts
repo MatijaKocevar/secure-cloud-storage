@@ -17,6 +17,7 @@ import { BucketFile } from '../../core/models/file.model';
 export class BucketDetailComponent implements OnInit {
     bucket: Bucket | undefined;
     files: BucketFile[] = [];
+    selectedFile: BucketFile | null = null;
     selectedTab: 'files' | 'details' = 'files';
 
     constructor(
@@ -49,10 +50,17 @@ export class BucketDetailComponent implements OnInit {
         return this.files.length;
     }
 
-    deleteFile(fileId: number): void {
-        this.fileService.deleteFile(fileId).subscribe(() => {
-            this.files = this.files.filter((file) => file.id !== fileId);
-        });
+    selectFile(file: BucketFile): void {
+        this.selectedFile = file;
+    }
+
+    deleteSelectedFile(): void {
+        if (this.selectedFile) {
+            this.fileService.deleteFile(this.selectedFile.id).subscribe(() => {
+                this.files = this.files.filter((file) => file.id !== this.selectedFile!.id);
+                this.selectedFile = null;
+            });
+        }
     }
 
     uploadFile(): void {

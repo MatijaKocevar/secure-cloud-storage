@@ -37,12 +37,23 @@
             <h3>Files</h3>
             <p>Total Files: {{ getTotalFiles() }}</p>
             <ul class="list-group mb-3">
-                <li class="list-group-item" *ngFor="let file of files">
+                <li
+                    class="list-group-item"
+                    *ngFor="let file of files"
+                    (click)="selectFile(file)"
+                    [class.active]="file === selectedFile"
+                    role="button"
+                    tabindex="0"
+                    (keydown.enter)="selectFile(file)"
+                    (keydown.space)="selectFile(file)"
+                >
                     {{ file.name }}
-                    <button class="btn btn-sm btn-danger float-right" (click)="deleteFile(file.id)">Delete</button>
                 </li>
             </ul>
             <button class="btn btn-primary" (click)="uploadFile()">Upload Object</button>
+            <button class="btn btn-danger ml-2" [disabled]="!selectedFile" (click)="deleteSelectedFile()">
+                Delete Selected File
+            </button>
         </div>
         <div *ngIf="selectedTab === 'details'" id="details-tab">
             <h3>Details</h3>
