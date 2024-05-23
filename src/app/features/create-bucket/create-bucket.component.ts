@@ -21,15 +21,18 @@ export class CreateBucketComponent {
     constructor(private bucketService: BucketService) {}
 
     createBucket() {
-        this.bucketService.createBucket(this.bucket).subscribe(
-            (createdBucket) => {
+        console.log('CreateBucketComponent: createBucket called');
+        const observer = {
+            next: (createdBucket: Bucket) => {
                 this.bucketCreated.emit(createdBucket);
                 this.bucket = { id: 0, name: '', location: '' };
+                this.errorMessage = '';
             },
-            (error) => {
+            error: () => {
                 this.errorMessage = 'Error creating bucket';
-                console.error('Error creating bucket', error);
             },
-        );
+        };
+
+        this.bucketService.createBucket(this.bucket).subscribe(observer);
     }
 }

@@ -30,10 +30,8 @@ export class BucketListComponent implements OnInit {
     }
 
     onBucketCreated(newBucket: Bucket) {
-        this.bucketService.createBucket(newBucket).subscribe((createdBucket) => {
-            this.buckets.push(createdBucket);
-            this.showCreateForm = false;
-        });
+        this.buckets.push(newBucket);
+        this.showCreateForm = false;
     }
 
     goToBucketDetail(id: number): void {
