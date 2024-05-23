@@ -34,7 +34,6 @@ export function app(): express.Express {
 
     // API to create a bucket
     server.post('/api/buckets', (req: Request, res: Response) => {
-        console.log('Create buckets');
         const data = JSON.parse(readFileSync(join(browserDistFolder, 'assets/data/buckets.json'), 'utf8')) as Bucket[];
         const newBucket: Bucket = req.body;
         newBucket.id = data.length ? Math.max(...data.map((b) => b.id)) + 1 : 1;
