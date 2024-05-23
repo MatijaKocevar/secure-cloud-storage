@@ -34,7 +34,6 @@
     </ul>
     <div class="tab-content mt-3">
         <div *ngIf="selectedTab === 'files'" id="files-tab">
-            <h3>Files</h3>
             <p>Total Files: {{ getTotalFiles() }}</p>
             <table class="table table-striped">
                 <thead>
@@ -66,8 +65,9 @@
             </button>
         </div>
         <div *ngIf="selectedTab === 'details'" id="details-tab">
-            <h3>Details</h3>
-            <!-- Add details content here -->
+            <p><strong>Bucket Name:</strong> {{ bucket.name }}</p>
+            <p><strong>Location:</strong> {{ location?.name }}</p>
+            <p><strong>Storage Size:</strong> {{ location!.size | fileSize }}</p>
         </div>
     </div>
 </div>

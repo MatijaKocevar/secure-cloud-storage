@@ -4,8 +4,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BucketService } from '../../core/services/bucket/bucket.service';
 import { FileService } from '../../core/services/file/file.service';
+import { LocationService } from '../../core/services/location/location.service';
 import { Bucket } from '../../core/models/bucket.model';
 import { BucketFile } from '../../core/models/file.model';
+import { BucketLocation } from '../../core/models/location.model';
 import { FileSizePipe } from '../../pipes/file-size.pipe';
 
 @Component({
@@ -18,13 +20,15 @@ import { FileSizePipe } from '../../pipes/file-size.pipe';
 export class BucketDetailComponent implements OnInit {
     bucket: Bucket | undefined;
     files: BucketFile[] = [];
-    selectedFile: BucketFile | undefined;
     selectedTab: 'files' | 'details' = 'files';
+    selectedFile: BucketFile | null = null;
+    location: BucketLocation | undefined;
 
     constructor(
         private route: ActivatedRoute,
         private bucketService: BucketService,
         private fileService: FileService,
+        private locationService: LocationService,
     ) {}
 
     ngOnInit(): void {
@@ -33,6 +37,7 @@ export class BucketDetailComponent implements OnInit {
             this.bucket = buckets.find((b) => b.id === id);
             if (this.bucket) {
                 this.loadFiles(this.bucket.id);
+                this.loadLocation(this.bucket.id);
             }
         });
     }
@@ -47,6 +52,12 @@ export class BucketDetailComponent implements OnInit {
         });
     }
 
+    loadLocation(locationId: number): void {
+        this.locationService.getLocationById(locationId).subscribe((location) => {
+            this.location = location;
+        });
+    }
+
     getTotalFiles(): number {
         return this.files.length;
     }
@@ -56,12 +67,11 @@ export class BucketDetailComponent implements OnInit {
     }
 
     deleteSelectedFile(): void {
-        if (this.selectedFile) {
-            this.fileService.deleteFile(this.selectedFile.id).subscribe(() => {
-                this.files = this.files.filter((file) => file.id !== this.selectedFile!.id);
-                this.selectedFile = undefined;
-            });
-        }
+        if (!this.selectedFile) return;
+        this.fileService.deleteFile(this.selectedFile.id).subscribe(() => {
+            this.files = this.files.filter((file) => file.id !== this.selectedFile!.id);
+            this.selectedFile = null;
+        });
     }
 
     uploadFile(): void {

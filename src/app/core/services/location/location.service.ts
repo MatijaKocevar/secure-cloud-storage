@@ -25,4 +25,8 @@ export class LocationService {
     getLocations(): Observable<BucketLocation[]> {
         return this.http.get<BucketLocation[]>(`${this.apiUrl}/locations`);
     }
+
+    getLocationById(id: number): Observable<BucketLocation> {
+        return this.http.get<BucketLocation>(`${this.apiUrl}/locations/${id}`);
+    }
 }

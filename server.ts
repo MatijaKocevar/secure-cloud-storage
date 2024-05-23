@@ -81,6 +81,20 @@ export function app(): express.Express {
         res.json(locations);
     });
 
+    // API to get a location by ID
+    server.get('/api/locations/:id', (req: Request, res: Response) => {
+        const locationId = parseInt(req.params['id'], 10);
+        const data = JSON.parse(
+            readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8'),
+        ) as BucketLocation[];
+        const location = data.find((loc) => loc.id === locationId);
+        if (location) {
+            res.json(location);
+        } else {
+            res.status(404).send('Location not found');
+        }
+    });
+
     // Serve static files from /browser
     server.get(
         '*.*',
