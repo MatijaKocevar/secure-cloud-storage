@@ -1,0 +1,12 @@
+<div class="d-flex justify-content-between align-items-center">
+    <button class="btn btn-danger" (click)="deleteBucket()">Delete Bucket</button>
+</div>
+<p><strong>Bucket Name:</strong> {{ bucket.name }}</p>
+<p><strong>Location:</strong> {{ location.name }}</p>
+<p><strong>Storage Size:</strong> {{ location.size | fileSize }}</p>
+<app-confirmation-modal
+    *ngIf="showModal"
+    [message]="modalMessage"
+    (confirm)="onModalConfirm()"
+    (cancel)="onModalCancel()"
+></app-confirmation-modal>

@@ -1,0 +1,23 @@
+<div class="container mt-5">
+    <h1>Bucket List</h1>
+    <button class="btn btn-primary mb-3" (click)="showCreateForm = true" *ngIf="!showCreateForm">
+        Create New Bucket
+    </button>
+    <div *ngIf="showCreateForm">
+        <app-create-bucket (bucketCreated)="onBucketCreated($event)"></app-create-bucket>
+    </div>
+    <ul class="list-group">
+        <li
+            class="list-group-item"
+            *ngFor="let bucket of buckets"
+            (click)="goToBucketDetail(bucket.id)"
+            (keydown.enter)="goToBucketDetail(bucket.id)"
+            (keydown.space)="goToBucketDetail(bucket.id)"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="'Bucket ' + bucket.name + ' at ' + bucket.locationName"
+        >
+            {{ bucket.name }} - {{ bucket.locationName }}
+        </li>
+    </ul>
+</div>

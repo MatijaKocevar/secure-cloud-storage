@@ -1,0 +1,26 @@
+<div class="container mt-5" *ngIf="bucket">
+    <app-bucket-header
+        [bucketName]="bucket.name"
+        [selectedTab]="selectedTab"
+        (tabSelected)="selectTab($event)"
+    ></app-bucket-header>
+
+    <div class="tab-content mt-3">
+        <div *ngIf="selectedTab === 'files'" id="files-tab">
+            <app-bucket-files
+                [files]="files"
+                [bucketId]="bucket.id"
+                [location]="location!"
+                (fileDeleted)="deleteFileFromList($event)"
+                (availableSpaceUpdated)="updateAvailableSpace()"
+            ></app-bucket-files>
+        </div>
+        <div *ngIf="selectedTab === 'details'" id="details-tab">
+            <app-bucket-details
+                [bucket]="bucket"
+                [location]="location!"
+                (bucketDeleted)="onBucketDeleted()"
+            ></app-bucket-details>
+        </div>
+    </div>
+</div>
