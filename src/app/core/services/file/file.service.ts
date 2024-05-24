@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { isPlatformServer } from '@angular/common';
 import { BucketFile } from '../../models/file.model';
 import { environment } from '../../../../environments/environment';
@@ -22,17 +22,16 @@ export class FileService {
         }
     }
 
-    getFiles(bucketId: number): Observable<BucketFile[]> {
-        return this.http.get<BucketFile[]>(`${this.apiUrl}/files?bucketId=${bucketId}`);
+    async getFiles(bucketId: number): Promise<BucketFile[]> {
+        return firstValueFrom(this.http.get<BucketFile[]>(`${this.apiUrl}/files?bucketId=${bucketId}`));
     }
 
-    uploadFile(file: BucketFile): Observable<BucketFile> {
+    async uploadFile(file: BucketFile): Promise<BucketFile> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
-        return this.http.post<BucketFile>(`${this.apiUrl}/files`, { ...file }, { headers });
+        return firstValueFrom(this.http.post<BucketFile>(`${this.apiUrl}/files`, { ...file }, { headers }));
     }
 
-    deleteFile(fileId: number): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/files/${fileId}`);
+    async deleteFile(fileId: number): Promise<void> {
+        return firstValueFrom(this.http.delete<void>(`${this.apiUrl}/files/${fileId}`));
     }
 }

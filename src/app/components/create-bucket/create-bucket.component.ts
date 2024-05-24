@@ -25,29 +25,23 @@ export class CreateBucketComponent implements OnInit {
         private locationService: LocationService,
     ) {}
 
-    ngOnInit() {
-        this.locationService.getLocations().subscribe({
-            next: (locations: BucketLocation[]) => {
-                this.locations = locations;
-            },
-            error: (error) => {
-                console.error('Error fetching locations', error);
-            },
-        });
+    async ngOnInit(): Promise<void> {
+        try {
+            this.locations = await this.locationService.getLocations();
+        } catch (error) {
+            console.error('Error fetching locations', error);
+        }
     }
 
-    createBucket() {
-        const observer = {
-            next: (createdBucket: Bucket) => {
-                this.bucketCreated.emit(createdBucket);
-                this.bucket = { id: 0, name: '', locationId: 0 };
-                this.errorMessage = '';
-            },
-            error: () => {
-                this.errorMessage = 'Error creating bucket';
-            },
-        };
-
-        this.bucketService.createBucket(this.bucket as Bucket).subscribe(observer);
+    async createBucket() {
+        try {
+            const createdBucket = await this.bucketService.createBucket(this.bucket as Bucket);
+            this.bucketCreated.emit(createdBucket);
+            this.bucket = { id: 0, name: '', locationId: 0 };
+            this.errorMessage = '';
+        } catch (error) {
+            console.error('Error creating bucket', error);
+            this.errorMessage = 'Error creating bucket';
+        }
     }
 }

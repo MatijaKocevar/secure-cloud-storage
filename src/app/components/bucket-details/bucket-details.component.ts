@@ -28,12 +28,15 @@ export class BucketDetailsComponent {
     ) {}
 
     deleteBucket(): void {
-        this.confirmAction = () => {
-            this.bucketService.deleteBucket(this.bucket.id).subscribe(() => {
+        this.confirmAction = async () => {
+            try {
+                await this.bucketService.deleteBucket(this.bucket.id);
                 this.router.navigate(['/']);
                 this.bucketDeleted.emit();
                 this.showModal = false;
-            });
+            } catch (error) {
+                console.error('Error deleting bucket:', error);
+            }
         };
         this.modalMessage = 'Do you really want to delete this bucket?';
         this.showModal = true;

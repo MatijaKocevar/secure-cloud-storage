@@ -32,32 +32,39 @@ export class BucketDetailComponent implements OnInit {
         private locationService: LocationService,
     ) {}
 
-    ngOnInit(): void {
+    async ngOnInit(): Promise<void> {
         const id = Number(this.route.snapshot.paramMap.get('id'));
 
-        this.bucketService.getBuckets().subscribe((buckets) => {
+        try {
+            const buckets = await this.bucketService.getBuckets();
             this.bucket = buckets.find((b) => b.id === id);
             if (this.bucket) {
-                this.loadFiles(this.bucket.id);
-                this.loadLocation(this.bucket.locationId);
+                await this.loadFiles(this.bucket.id);
+                await this.loadLocation(this.bucket.locationId);
             }
-        });
+        } catch (error) {
+            console.error('Error fetching bucket details:', error);
+        }
     }
 
     selectTab(tab: 'files' | 'details'): void {
         this.selectedTab = tab;
     }
 
-    loadFiles(bucketId: number): void {
-        this.fileService.getFiles(bucketId).subscribe((files) => {
-            this.files = files;
-        });
+    async loadFiles(bucketId: number): Promise<void> {
+        try {
+            this.files = await this.fileService.getFiles(bucketId);
+        } catch (error) {
+            console.error('Error fetching files:', error);
+        }
     }
 
-    loadLocation(locationId: number): void {
-        this.locationService.getLocationById(locationId).subscribe((location) => {
-            this.location = location;
-        });
+    async loadLocation(locationId: number): Promise<void> {
+        try {
+            this.location = await this.locationService.getLocationById(locationId);
+        } catch (error) {
+            console.error('Error fetching location:', error);
+        }
     }
 
     deleteFileFromList(fileId: number): void {

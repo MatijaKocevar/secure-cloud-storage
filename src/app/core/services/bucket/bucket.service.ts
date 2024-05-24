@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { Bucket } from '../../models/bucket.model';
 import { environment } from '../../../../environments/environment';
 import { isPlatformServer } from '@angular/common';
@@ -22,18 +22,18 @@ export class BucketService {
         }
     }
 
-    getBuckets(): Observable<Bucket[]> {
-        return this.http.get<Bucket[]>(`${this.apiUrl}/buckets`);
+    async getBuckets(): Promise<Bucket[]> {
+        return firstValueFrom(this.http.get<Bucket[]>(`${this.apiUrl}/buckets`));
     }
 
-    createBucket(bucket: Bucket): Observable<Bucket> {
+    async createBucket(bucket: Bucket): Promise<Bucket> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
         bucket.createdAt = new Date();
         bucket.updatedAt = new Date();
-        return this.http.post<Bucket>(`${this.apiUrl}/buckets`, bucket, { headers });
+        return firstValueFrom(this.http.post<Bucket>(`${this.apiUrl}/buckets`, bucket, { headers }));
     }
 
-    deleteBucket(bucketId: number): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/buckets/${bucketId}`);
+    async deleteBucket(bucketId: number): Promise<void> {
+        return firstValueFrom(this.http.delete<void>(`${this.apiUrl}/buckets/${bucketId}`));
     }
 }
