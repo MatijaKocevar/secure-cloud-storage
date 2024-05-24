@@ -1,0 +1,44 @@
+name: Build and Deploy Angular SSR
+
+on:
+    push:
+        branches:
+            - deploy
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: '20'
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build project
+              run: npm run build:ssr
+
+            - name: Configure SSH private key
+              run: |
+                  mkdir -p ~/.ssh
+                  echo "${{ secrets.PORTFOLIOSERVERSSH }}" > ~/.ssh/id_rsa
+                  chmod 600 ~/.ssh/id_rsa
+                  ssh-keyscan -t rsa ec2-13-51-72-26.eu-north-1.compute.amazonaws.com >> ~/.ssh/known_hosts
+
+            - name: Remove existing dist folder on server
+              run: |
+                  ssh ubuntu@ec2-13-51-72-26.eu-north-1.compute.amazonaws.com "sudo rm -rf /var/angular_ssr_app/dist"
+
+            - name: Push dist folder to server
+              run: |
+                  scp -r dist ubuntu@ec2-13-51-72-26.eu-north-1.compute.amazonaws.com:/var/angular_ssr_app
+
+            - name: Restart Angular SSR service
+              run: |
+                  ssh ubuntu@ec2-13-51-72-26.eu-north-1.compute.amazonaws.com "sudo systemctl restart angular-ssr.service"
