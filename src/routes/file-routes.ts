@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { readFileSync, writeFileSync } from 'fs';
+import { promises as fs } from 'fs';
 import { dirname, join } from 'path';
 import { BucketFile } from '../app/core/models/file.model';
 import { Bucket } from '../app/core/models/bucket.model';
@@ -13,11 +13,11 @@ const fileRouter = Router();
 const browserDistFolder = join(__dirname, '../browser');
 
 // API to get files by bucketId
-fileRouter.get('/', (req: Request, res: Response) => {
+fileRouter.get('/', async (req: Request, res: Response) => {
     try {
         const bucketId = parseInt(req.query['bucketId'] as string, 10);
         const data = JSON.parse(
-            readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
+            await fs.readFile(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
         ) as BucketFile[];
         const files = data.filter((file) => file.bucketId === bucketId);
 
@@ -29,12 +29,12 @@ fileRouter.get('/', (req: Request, res: Response) => {
 });
 
 // API to upload a file
-fileRouter.post('/', (req: Request, res: Response) => {
+fileRouter.post('/', async (req: Request, res: Response) => {
     try {
         const data = JSON.parse(
-            readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
+            await fs.readFile(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
         ) as BucketFile[];
-        const locationsData = readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8');
+        const locationsData = await fs.readFile(join(browserDistFolder, 'assets/data/locations.json'), 'utf8');
         const locations: BucketLocation[] = JSON.parse(locationsData);
 
         const newFile: BucketFile = req.body;
@@ -45,17 +45,23 @@ fileRouter.post('/', (req: Request, res: Response) => {
             data.push(newFile);
             location.availableSpace -= newFile.size;
 
-            writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
-            writeFileSync(join(browserDistFolder, 'assets/data/locations.json'), JSON.stringify(locations, null, 2));
+            await fs.writeFile(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
+            await fs.writeFile(
+                join(browserDistFolder, 'assets/data/locations.json'),
+                JSON.stringify(locations, null, 2),
+            );
 
-            const bucketsData = readFileSync(join(browserDistFolder, 'assets/data/buckets.json'), 'utf8');
+            const bucketsData = await fs.readFile(join(browserDistFolder, 'assets/data/buckets.json'), 'utf8');
             const buckets: Bucket[] = JSON.parse(bucketsData);
             const bucket = buckets.find((b) => b.id === newFile.bucketId);
 
             if (bucket) {
                 bucket.updatedAt = new Date();
 
-                writeFileSync(join(browserDistFolder, 'assets/data/buckets.json'), JSON.stringify(buckets, null, 2));
+                await fs.writeFile(
+                    join(browserDistFolder, 'assets/data/buckets.json'),
+                    JSON.stringify(buckets, null, 2),
+                );
             }
 
             res.json(newFile);
@@ -69,23 +75,25 @@ fileRouter.post('/', (req: Request, res: Response) => {
 });
 
 // API to delete a file
-fileRouter.delete('/:id', (req: Request, res: Response) => {
+fileRouter.delete('/:id', async (req: Request, res: Response) => {
     try {
         const fileId = parseInt(req.params['id'], 10);
-        let data = JSON.parse(readFileSync(join(browserDistFolder, 'assets/data/files.json'), 'utf8')) as BucketFile[];
+        let data = JSON.parse(
+            await fs.readFile(join(browserDistFolder, 'assets/data/files.json'), 'utf8'),
+        ) as BucketFile[];
         const fileToDelete = data.find((file) => file.id === fileId);
 
         if (fileToDelete) {
             data = data.filter((file) => file.id !== fileId);
-            const locationsData = readFileSync(join(browserDistFolder, 'assets/data/locations.json'), 'utf8');
+            const locationsData = await fs.readFile(join(browserDistFolder, 'assets/data/locations.json'), 'utf8');
             const locations: BucketLocation[] = JSON.parse(locationsData);
             const location = locations.find((loc) => loc.id === fileToDelete.locationId);
 
             if (location) {
                 location.availableSpace += fileToDelete.size;
 
-                writeFileSync(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
-                writeFileSync(
+                await fs.writeFile(join(browserDistFolder, 'assets/data/files.json'), JSON.stringify(data, null, 2));
+                await fs.writeFile(
                     join(browserDistFolder, 'assets/data/locations.json'),
                     JSON.stringify(locations, null, 2),
                 );
