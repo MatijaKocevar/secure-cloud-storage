@@ -30,6 +30,10 @@ export class BucketListComponent implements OnInit {
         }
     }
 
+    getBucketCount(): number {
+        return this.buckets.length;
+    }
+
     onBucketCreated(newBucket: Bucket) {
         this.buckets.unshift(newBucket);
         this.showCreateForm = false;

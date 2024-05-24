@@ -5,7 +5,7 @@
     </div>
     <div class="bg-white p-3 px-4">
         <div class="d-flex gap-2 align-items-center justify-content-between flex-row mb-1">
-            <p>All Buckets (2)</p>
+            <p>All Buckets ({{ getBucketCount() }})</p>
             <button class="btn btn-primary mb-3 py-0" (click)="showCreateForm = true" *ngIf="!showCreateForm">
                 Create New Bucket
             </button>
