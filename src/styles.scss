@@ -35,6 +35,15 @@ select.form-control {
         .nav-link {
             border: none !important;
             border-radius: 0 !important;
+            color: black !important;
+
+            &:hover {
+                color: black !important;
+            }
+
+            &.active {
+                color: black !important;
+            }
         }
     }
 }
