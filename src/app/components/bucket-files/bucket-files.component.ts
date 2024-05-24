@@ -71,9 +71,10 @@ export class BucketFilesComponent {
         const reader = new FileReader();
         reader.onload = async () => {
             const base64Content = (reader.result as string).split(',')[1];
+            const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, '');
             const newFile: BucketFile = {
                 id: 0,
-                name: file.name,
+                name: fileNameWithoutExtension,
                 bucketId: this.bucketId,
                 locationId: this.location.id,
                 size: file.size,

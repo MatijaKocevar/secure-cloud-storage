@@ -1,7 +1,7 @@
 [
     {
         "id": 1,
-        "name": "test1.txt",
+        "name": "test1",
         "bucketId": 1,
         "locationId": 10,
         "size": 7,
@@ -12,7 +12,7 @@
     },
     {
         "id": 2,
-        "name": "test2.txt",
+        "name": "test2",
         "bucketId": 1,
         "locationId": 10,
         "size": 6,
@@ -23,7 +23,7 @@
     },
     {
         "id": 3,
-        "name": "test3.txt",
+        "name": "test3",
         "bucketId": 1,
         "locationId": 10,
         "size": 5,
@@ -34,7 +34,7 @@
     },
     {
         "id": 4,
-        "name": "test1.txt",
+        "name": "test1",
         "bucketId": 2,
         "locationId": 20,
         "size": 7,
