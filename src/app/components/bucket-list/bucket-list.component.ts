@@ -22,10 +22,12 @@ export class BucketListComponent implements OnInit {
         private router: Router,
     ) {}
 
-    ngOnInit(): void {
-        this.bucketService.getBuckets().subscribe((data) => {
-            this.buckets = data;
-        });
+    async ngOnInit(): Promise<void> {
+        try {
+            this.buckets = await this.bucketService.getBuckets();
+        } catch (error) {
+            console.error('Error fetching buckets:', error);
+        }
     }
 
     onBucketCreated(newBucket: Bucket) {

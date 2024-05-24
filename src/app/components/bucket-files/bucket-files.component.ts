@@ -38,14 +38,17 @@ export class BucketFilesComponent {
     deleteSelectedFile(): void {
         if (!this.selectedFile) return;
 
-        this.confirmAction = () => {
-            this.fileService.deleteFile(this.selectedFile!.id).subscribe(() => {
+        this.confirmAction = async () => {
+            try {
+                await this.fileService.deleteFile(this.selectedFile!.id);
                 this.files = this.files.filter((file) => file.id !== this.selectedFile!.id);
                 this.fileDeleted.emit(this.selectedFile!.id);
                 this.availableSpaceUpdated.emit();
                 this.selectedFile = null;
                 this.showModal = false;
-            });
+            } catch (error) {
+                console.error('Error deleting file:', error);
+            }
         };
         this.modalMessage = 'Do you really want to delete this file?';
         this.showModal = true;
@@ -66,7 +69,7 @@ export class BucketFilesComponent {
         }
 
         const reader = new FileReader();
-        reader.onload = () => {
+        reader.onload = async () => {
             const base64Content = (reader.result as string).split(',')[1];
             const newFile: BucketFile = {
                 id: 0,
@@ -79,10 +82,13 @@ export class BucketFilesComponent {
                 content: base64Content,
             };
 
-            this.fileService.uploadFile(newFile).subscribe((uploadedFile) => {
+            try {
+                const uploadedFile = await this.fileService.uploadFile(newFile);
                 this.files.push(uploadedFile);
                 this.availableSpaceUpdated.emit();
-            });
+            } catch (error) {
+                console.error('Error uploading file:', error);
+            }
         };
         reader.readAsDataURL(file);
     }
