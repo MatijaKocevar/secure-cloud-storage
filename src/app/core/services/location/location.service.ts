@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { isPlatformServer } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 import { BucketLocation } from '../../models/location.model';
@@ -22,11 +22,11 @@ export class LocationService {
         }
     }
 
-    getLocations(): Observable<BucketLocation[]> {
-        return this.http.get<BucketLocation[]>(`${this.apiUrl}/locations`);
+    async getLocations(): Promise<BucketLocation[]> {
+        return firstValueFrom(this.http.get<BucketLocation[]>(`${this.apiUrl}/locations`));
     }
 
-    getLocationById(id: number): Observable<BucketLocation> {
-        return this.http.get<BucketLocation>(`${this.apiUrl}/locations/${id}`);
+    async getLocationById(id: number): Promise<BucketLocation> {
+        return firstValueFrom(this.http.get<BucketLocation>(`${this.apiUrl}/locations/${id}`));
     }
 }
