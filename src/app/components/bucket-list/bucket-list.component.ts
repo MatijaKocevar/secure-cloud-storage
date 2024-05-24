@@ -29,7 +29,7 @@ export class BucketListComponent implements OnInit {
     }
 
     onBucketCreated(newBucket: Bucket) {
-        this.buckets.push(newBucket);
+        this.buckets.unshift(newBucket);
         this.showCreateForm = false;
     }
 

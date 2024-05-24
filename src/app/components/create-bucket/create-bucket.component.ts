@@ -37,7 +37,6 @@ export class CreateBucketComponent implements OnInit {
     }
 
     createBucket() {
-        console.log('CreateBucketComponent: createBucket called');
         const observer = {
             next: (createdBucket: Bucket) => {
                 this.bucketCreated.emit(createdBucket);

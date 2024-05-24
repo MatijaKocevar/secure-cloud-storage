@@ -3,4 +3,6 @@ export interface Bucket {
     name: string;
     locationId: number;
     locationName?: string;
+    createdAt: Date;
+    updatedAt: Date;
 }

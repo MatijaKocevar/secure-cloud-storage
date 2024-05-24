@@ -5,7 +5,6 @@ export interface BucketFile {
     locationId: number;
     size: number;
     type: string;
-    createdAt: Date;
-    updatedAt: Date;
+    lastModified: Date;
     content: string;
 }
