@@ -6,10 +6,11 @@
         </div>
         <div class="form-group">
             <label for="location">Location</label>
-            <select id="location" class="form-control" [(ngModel)]="bucket.location" name="location" required>
-                <option *ngFor="let location of locations" [value]="location">{{ location }}</option>
+            <select id="location" class="form-control" [(ngModel)]="bucket.locationId" name="location" required>
+                <option *ngFor="let location of locations" [ngValue]="location.id">{{ location.name }}</option>
             </select>
         </div>
         <button type="submit" class="btn btn-primary mt-3">Create Bucket</button>
     </form>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
 </div>

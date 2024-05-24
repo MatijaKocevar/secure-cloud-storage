@@ -1,0 +1,9 @@
+<div class="modal-overlay" tabindex="0" (click)="onCancel()" (keydown)="onCancel()">
+    <div class="modal-content" tabindex="-1" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+        <p>{{ message }}</p>
+        <div class="modal-actions">
+            <button class="btn btn-primary" (click)="onConfirm()">Confirm</button>
+            <button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+        </div>
+    </div>
+</div>
