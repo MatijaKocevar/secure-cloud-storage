@@ -1,23 +1,36 @@
-<div class="container mt-5">
-    <h1>Bucket List</h1>
-    <button class="btn btn-primary mb-3" (click)="showCreateForm = true" *ngIf="!showCreateForm">
-        Create New Bucket
-    </button>
+<div>
+    <h1 class="mb-4">Bucket List</h1>
     <div *ngIf="showCreateForm">
         <app-create-bucket (bucketCreated)="onBucketCreated($event)"></app-create-bucket>
     </div>
-    <ul class="list-group">
-        <li
-            class="list-group-item"
-            *ngFor="let bucket of buckets"
-            (click)="goToBucketDetail(bucket.id)"
-            (keydown.enter)="goToBucketDetail(bucket.id)"
-            (keydown.space)="goToBucketDetail(bucket.id)"
-            tabindex="0"
-            role="button"
-            [attr.aria-label]="'Bucket ' + bucket.name + ' at ' + bucket.locationName"
-        >
-            {{ bucket.name }} - {{ bucket.locationName }}
-        </li>
-    </ul>
+    <div class="bg-white p-3 px-4">
+        <div class="d-flex gap-2 align-items-center justify-content-between flex-row mb-1">
+            <p>All Buckets (2)</p>
+            <button class="btn btn-primary mb-3 py-0" (click)="showCreateForm = true" *ngIf="!showCreateForm">
+                Create New Bucket
+            </button>
+        </div>
+        <table class="table">
+            <thead class="custom-header">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Location</th>
+                </tr>
+            </thead>
+            <tbody class="custom-body">
+                <tr
+                    *ngFor="let bucket of buckets"
+                    (click)="goToBucketDetail(bucket.id)"
+                    (keydown.enter)="goToBucketDetail(bucket.id)"
+                    (keydown.space)="goToBucketDetail(bucket.id)"
+                    tabindex="0"
+                    role="button"
+                    [attr.aria-label]="'Bucket ' + bucket.name + ' at ' + bucket.locationName"
+                >
+                    <td>{{ bucket.name }}</td>
+                    <td>{{ bucket.locationName }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

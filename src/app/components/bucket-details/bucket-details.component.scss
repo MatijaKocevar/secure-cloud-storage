@@ -1,0 +1,36 @@
+.bg-white {
+    position: relative;
+
+    .button-container {
+        position: absolute;
+        top: -2.2rem;
+        right: 0;
+    }
+
+    .pt-4 {
+        .d-flex {
+            display: flex;
+            align-items: center;
+
+            p {
+                margin: 0;
+
+                &:first-child {
+                    flex: 0 0 120px;
+                    text-align: right;
+                    white-space: nowrap;
+                }
+
+                &:last-child {
+                    flex: 1;
+                    margin-left: 3rem;
+                    text-align: left;
+                }
+            }
+        }
+    }
+}
+
+.btn-danger {
+    margin-left: 1rem;
+}

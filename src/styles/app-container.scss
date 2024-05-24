@@ -1,0 +1,8 @@
+.app-container {
+    @extend .container !optional;
+    margin-top: 2rem !important;
+    margin-left: 2rem !important;
+    margin-right: 2rem !important;
+    width: 100%;
+    max-width: calc(100% - 4rem);
+}

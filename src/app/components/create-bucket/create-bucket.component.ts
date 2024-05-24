@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Bucket } from '../../core/models/bucket.model';
 import { BucketService } from '../../core/services/bucket/bucket.service';
 import { LocationService } from '../../core/services/location/location.service';
@@ -19,6 +19,7 @@ export class CreateBucketComponent implements OnInit {
     bucket: Partial<Bucket> = { id: 0, name: '', locationId: 0 };
     locations: BucketLocation[] = [];
     errorMessage = '';
+    submitted = false;
 
     constructor(
         private bucketService: BucketService,
@@ -43,5 +44,31 @@ export class CreateBucketComponent implements OnInit {
             console.error('Error creating bucket', error);
             this.errorMessage = 'Error creating bucket';
         }
+    }
+
+    onSubmit(form: NgForm) {
+        this.submitted = true;
+
+        Object.keys(form.controls).forEach((key) => {
+            form.controls[key].markAsTouched();
+        });
+
+        let formValid = true;
+
+        if (!this.bucket.name) {
+            form.controls['name'].setErrors({ required: true });
+            formValid = false;
+        }
+
+        if (this.bucket.locationId === 0) {
+            form.controls['location'].setErrors({ required: true });
+            formValid = false;
+        }
+
+        if (!formValid) {
+            return;
+        }
+
+        this.createBucket();
     }
 }
