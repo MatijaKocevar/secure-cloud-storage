@@ -2,9 +2,29 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.7.
 
+## Description
+
+This is a simple Angular application that meets the following requirements:
+
+-   Uses the latest version of Angular.
+-   Matches the attached Wireframe (`wireframes.pdf`).
+-   Utilizes Bootstrap elements for building the user interface.
+-   Stores and reads all data (buckets, locations) from a JSON file.
+-   The entire code is hosted in a private Git repository.
+-   Hosted online at [Secure Cloud Storage](https://matijakocevar.com/projects/secure-cloud-storage).
+
+## Requirements
+
+To run this project, you will need the following:
+
+-   Node.js (version 14.x or later)
+-   npm (version 6.x or later)
+-   Angular CLI (version 17.3.7)
+-   Bootstrap (included in the project dependencies)
+
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Run `npm run watch` for the backend, and `npm run serve:ssr` for the frontend development server. Navigate to `http://localhost:4000/`.
 
 ## Code scaffolding
 
@@ -17,10 +37,6 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
 ## Further help
 
