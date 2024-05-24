@@ -8,3 +8,8 @@ export const routes: Routes = [
     { path: 'create', component: CreateBucketComponent },
     { path: 'bucket/:id', component: BucketDetailComponent },
 ];
+export const routes: Routes = [
+    { path: '', component: BucketListComponent },
+    { path: 'create', component: CreateBucketComponent },
+    { path: 'bucket/:id', component: BucketDetailComponent },
+];
