@@ -13,12 +13,29 @@
 .modal-content {
     background: white;
     padding: 2rem;
-    border-radius: 8px;
-    text-align: center;
+    width: 50%;
+    border: 2px solid black;
 }
 .modal-actions {
-    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
 }
-button {
-    margin: 0 0.5rem;
+
+.btn {
+    border: 1px solid #ccc !important;
+    border-radius: 4px;
+    color: black;
+
+    &.btn-outline-primary {
+        border-color: #9b9b9b !important;
+    }
+
+    &:hover {
+        border-color: #9b9b9b !important;
+        background-color: #9b9b9b !important;
+    }
+
+    &:disabled {
+        border-color: #ccc !important;
+    }
 }

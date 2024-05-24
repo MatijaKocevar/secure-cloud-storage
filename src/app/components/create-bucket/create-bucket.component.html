@@ -1,16 +1,55 @@
-<div class="container">
-    <form (ngSubmit)="createBucket()">
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" class="form-control" [(ngModel)]="bucket.name" name="name" required />
-        </div>
-        <div class="form-group">
-            <label for="location">Location</label>
-            <select id="location" class="form-control" [(ngModel)]="bucket.locationId" name="location" required>
-                <option *ngFor="let location of locations" [ngValue]="location.id">{{ location.name }}</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary mt-3">Create Bucket</button>
-    </form>
-    <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+<div>
+    <p class="m-0 px-4">Create New Bucket</p>
+    <div class="bg-white p-3 px-4 mb-3">
+        <form (ngSubmit)="onSubmit(bucketForm)" #bucketForm="ngForm" novalidate>
+            <div class="row mb-3">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label class="mb-2" for="name">Bucket name*</label>
+                        <input
+                            type="text"
+                            id="name"
+                            class="form-control"
+                            [(ngModel)]="bucket.name"
+                            name="name"
+                            required
+                            #name="ngModel"
+                        />
+                        <div *ngIf="name.invalid && (name.dirty || name.touched || submitted)" class="text-danger">
+                            Bucket name is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label class="mb-2" for="location">Bucket location*</label>
+                        <select
+                            id="location"
+                            class="form-control"
+                            [(ngModel)]="bucket.locationId"
+                            name="location"
+                            required
+                            #location="ngModel"
+                            (blur)="location.control.markAsTouched()"
+                        >
+                            <option value="" disabled selected>Select a location</option>
+                            <option *ngFor="let loc of locations" [ngValue]="loc.id">
+                                {{ loc.name }}
+                            </option>
+                        </select>
+                        <div
+                            *ngIf="location.invalid && (location.dirty || location.touched || submitted)"
+                            class="text-danger"
+                        >
+                            Bucket location is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Create Bucket</button>
+        </form>
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+    </div>
 </div>

@@ -50,7 +50,7 @@ export class BucketFilesComponent {
                 console.error('Error deleting file:', error);
             }
         };
-        this.modalMessage = 'Do you really want to delete this file?';
+        this.modalMessage = 'Do you really want to delete this object?';
         this.showModal = true;
     }
 

@@ -1,1 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
+@import '../node_modules/bootstrap/scss/bootstrap';
+@import 'styles/app-container';
+
+html,
+body {
+    height: calc(100% - 3rem);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12pt;
+    background-color: #eff2f4;
+}
+
+input,
+select,
+textarea,
+button {
+    border-radius: 0 !important;
+}
+
+select.form-control {
+    appearance: auto !important;
+    -webkit-appearance: menulist-button !important; // Ensure appearance for WebKit browsers
+    -moz-appearance: menulist-button !important; // Ensure appearance for Firefox
+    padding-right: 2rem;
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 0.65rem auto;
+}
+
+.nav-tabs {
+    .nav-item {
+        .nav-link {
+            border: none !important;
+            border-radius: 0 !important;
+            color: black !important;
+
+            &:hover {
+                color: black !important;
+            }
+
+            &.active {
+                color: black !important;
+            }
+        }
+    }
+}

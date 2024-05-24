@@ -1,9 +1,22 @@
-<div class="d-flex justify-content-between align-items-center">
-    <button class="btn btn-danger" (click)="deleteBucket()">Delete Bucket</button>
+<div class="bg-white px-4 pb-3">
+    <div class="d-flex justify-content-end align-items-center button-container">
+        <button class="btn btn-danger py-0" (click)="deleteBucket()">Delete Bucket</button>
+    </div>
+    <div class="pt-4">
+        <div class="d-flex align-items-center m-1">
+            <p class="mb-0">Bucket Name:</p>
+            <p class="mb-0 ml-2">{{ bucket.name }}</p>
+        </div>
+        <div class="d-flex align-items-center m-1">
+            <p class="mb-0">Location:</p>
+            <p class="mb-0 ml-2">{{ location.name }}</p>
+        </div>
+        <div class="d-flex align-items-center m-1">
+            <p class="mb-0">Storage Size:</p>
+            <p class="mb-0 ml-2">{{ location.size | fileSize }}</p>
+        </div>
+    </div>
 </div>
-<p><strong>Bucket Name:</strong> {{ bucket.name }}</p>
-<p><strong>Location:</strong> {{ location.name }}</p>
-<p><strong>Storage Size:</strong> {{ location.size | fileSize }}</p>
 <app-confirmation-modal
     *ngIf="showModal"
     [message]="modalMessage"

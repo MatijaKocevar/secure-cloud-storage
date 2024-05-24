@@ -1,33 +1,53 @@
-<p>Total Files: {{ getTotalFiles() }}</p>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Last Modified</th>
-            <th scope="col">Size</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr
-            *ngFor="let file of files"
-            (click)="selectFile(file)"
-            [class.table-active]="file === selectedFile"
-            role="button"
-            tabindex="0"
-            (keydown.enter)="selectFile(file)"
-            (keydown.space)="selectFile(file)"
-        >
-            <td>{{ file.name }}</td>
-            <td>{{ file.lastModified | date: 'd.M.yyyy' }}</td>
-            <td>{{ file.size | fileSize }}</td>
-        </tr>
-    </tbody>
-</table>
-<button class="btn btn-primary" (click)="triggerFileInput()">Upload Object</button>
-<input type="file" #fileInput (change)="uploadFile($event)" style="display: none" />
-<button class="btn btn-danger ml-2" [disabled]="!selectedFile" (click)="deleteSelectedFile()">
-    Delete Selected File
-</button>
+<div class="bg-white px-4 pb-3">
+    <div class="d-flex flex-row justify-content-between align-items-center py-3">
+        <p class="m-0">All Files: {{ getTotalFiles() }}</p>
+        <div class="d-flex gap-3">
+            <button class="btn btn-outline-primary ml-2 py-0" [disabled]="!selectedFile" (click)="deleteSelectedFile()">
+                Delete Object
+            </button>
+            <button class="btn btn-outline-primary ml-2 py-0" (click)="triggerFileInput()">Upload Object</button>
+            <input type="file" #fileInput (change)="uploadFile($event)" style="display: none" />
+        </div>
+    </div>
+    <table class="table">
+        <thead class="custom-header">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Last Modified</th>
+                <th scope="col">Size</th>
+            </tr>
+        </thead>
+        <tbody class="custom-body">
+            <tr
+                *ngFor="let file of files"
+                (click)="selectFile(file)"
+                [class.table-active]="file === selectedFile"
+                role="button"
+                tabindex="0"
+                (keydown.enter)="selectFile(file)"
+                (keydown.space)="selectFile(file)"
+            >
+                <td>
+                    <svg width="20" height="20" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 64 64">
+                        <g id="iconCarrier">
+                            <g>
+                                <polygon fill="#000000" points="44,2.344 44,16 57.656,16 " />
+                                <path
+                                    fill="#000000"
+                                    d="M40,24c-2.211,0-4-1.789-4-4V0H8C5.789,0,4,1.789,4,4v56c0,2.211,1.789,4,4,4h48c2.211,0,4-1.789,4-4V24H40 z M24,24h4c2.211,0,4,1.789,4,4s-1.789,4-4,4h-4c-2.211,0-4-1.789-4-4S21.789,24,24,24z M40,48H24c-2.211,0-4-1.789-4-4 s1.789-4,4-4h16c2.211,0,4,1.789,4,4S42.211,48,40,48z"
+                                />
+                            </g>
+                        </g>
+                    </svg>
+                </td>
+                <td>{{ file.name }}</td>
+                <td>{{ file.lastModified | date: 'd.M.yyyy' }}</td>
+                <td>{{ file.size | fileSize }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 <app-confirmation-modal
     *ngIf="showModal"
     [message]="modalMessage"
