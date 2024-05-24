@@ -5,7 +5,7 @@
         (tabSelected)="selectTab($event)"
     ></app-bucket-header>
 
-    <div class="tab-content mt-3">
+    <div class="tab-content">
         <div *ngIf="selectedTab === 'files'" id="files-tab">
             <app-bucket-files
                 [files]="files"

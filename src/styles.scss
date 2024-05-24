@@ -29,3 +29,12 @@ select.form-control {
     background-position: right 0.75rem center;
     background-size: 0.65rem auto;
 }
+
+.nav-tabs {
+    .nav-item {
+        .nav-link {
+            border: none !important;
+            border-radius: 0 !important;
+        }
+    }
+}

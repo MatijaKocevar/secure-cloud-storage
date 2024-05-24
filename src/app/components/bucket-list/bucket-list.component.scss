@@ -22,19 +22,12 @@
         tr {
             td {
                 border: 0;
-                padding-top: 0;
-                padding-bottom: 0;
+                padding-top: 0.3rem;
+                padding-bottom: 0.3rem;
             }
-
-            &:first-child {
+            &:hover {
                 td {
-                    padding-top: 1rem;
-                }
-            }
-
-            &:last-child {
-                td {
-                    padding-bottom: 0.5rem;
+                    background-color: #f2f2f2;
                 }
             }
         }
