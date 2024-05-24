@@ -1,0 +1,42 @@
+.table {
+    border: 2px solid black;
+    border-collapse: collapse;
+
+    .custom-header {
+        tr {
+            th {
+                background-color: #cccccc;
+                border-top: 2px solid black;
+                border-bottom: 2px solid black;
+                padding-top: 0;
+                padding-bottom: 0;
+
+                &:first-child {
+                    width: 70%;
+                }
+            }
+        }
+    }
+
+    .custom-body {
+        tr {
+            td {
+                border: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+
+            &:first-child {
+                td {
+                    padding-top: 1rem;
+                }
+            }
+
+            &:last-child {
+                td {
+                    padding-bottom: 0.5rem;
+                }
+            }
+        }
+    }
+}
