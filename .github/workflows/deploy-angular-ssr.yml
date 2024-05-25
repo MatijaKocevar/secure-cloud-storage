@@ -38,3 +38,7 @@ jobs:
             - name: Push dist folder to server
               run: |
                   scp -r dist ubuntu@ec2-13-51-72-26.eu-north-1.compute.amazonaws.com:/var/angular_ssr_app
+
+            - name: Restart PM2 process
+              run: |
+                  ssh ubuntu@ec2-13-51-72-26.eu-north-1.compute.amazonaws.com "pm2 restart angular-ssr-app"
