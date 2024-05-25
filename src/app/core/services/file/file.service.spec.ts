@@ -9,6 +9,7 @@ describe('FileService', () => {
     let service: FileService;
     let httpMock: HttpTestingController;
     const apiUrl = environment.apiUrl;
+    const host = environment.host;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -105,6 +106,6 @@ describe('FileService', () => {
         });
 
         const serverService = TestBed.inject(FileService);
-        expect(serverService['apiUrl']).toBe(`http://localhost:4000${apiUrl}`);
+        expect(serverService['apiUrl']).toBe(`${host}${apiUrl}`);
     });
 });

@@ -9,6 +9,7 @@ describe('LocationService', () => {
     let service: LocationService;
     let httpMock: HttpTestingController;
     const apiUrl = environment.apiUrl;
+    const host = environment.host;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -64,6 +65,6 @@ describe('LocationService', () => {
         });
 
         const serverService = TestBed.inject(LocationService);
-        expect(serverService['apiUrl']).toBe(`http://localhost:4000${apiUrl}`);
+        expect(serverService['apiUrl']).toBe(`${host}${apiUrl}`);
     });
 });

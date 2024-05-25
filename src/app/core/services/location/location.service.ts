@@ -10,6 +10,7 @@ import { BucketLocation } from '../../models/location.model';
 })
 export class LocationService {
     private apiUrl = environment.apiUrl;
+    private host = environment.host;
     private isServer: boolean;
 
     constructor(
@@ -18,7 +19,7 @@ export class LocationService {
     ) {
         this.isServer = isPlatformServer(platformId);
         if (this.isServer) {
-            this.apiUrl = `http://localhost:4000${this.apiUrl}`;
+            this.apiUrl = `${this.host}${this.apiUrl}`;
         }
     }
 

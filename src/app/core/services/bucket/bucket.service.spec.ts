@@ -9,6 +9,7 @@ describe('BucketService', () => {
     let service: BucketService;
     let httpMock: HttpTestingController;
     const apiUrl = environment.apiUrl;
+    const host = environment.host;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -83,6 +84,6 @@ describe('BucketService', () => {
         });
 
         const serverService = TestBed.inject(BucketService);
-        expect(serverService['apiUrl']).toBe(`http://localhost:4000${apiUrl}`);
+        expect(serverService['apiUrl']).toBe(`${host}${apiUrl}`);
     });
 });

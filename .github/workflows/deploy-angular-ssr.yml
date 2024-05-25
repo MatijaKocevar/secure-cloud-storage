@@ -3,7 +3,7 @@ name: Build and Deploy Angular SSR
 on:
     push:
         branches:
-            - master
+            - deploy
 
 jobs:
     build-and-deploy:
@@ -22,7 +22,7 @@ jobs:
               run: npm ci
 
             - name: Build project
-              run: npm run build:ssr
+              run: npm run build
 
             - name: Configure SSH private key
               run: |
